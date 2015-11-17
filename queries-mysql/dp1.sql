@@ -1,0 +1,1 @@
+SELECT DISTINCT ls_sg.en AS title FROM studyGroup sg JOIN resource r_sg ON r_sg.id=sg.id JOIN langString ls_sg ON ls_sg.id=r_sg.prefLabel_id;

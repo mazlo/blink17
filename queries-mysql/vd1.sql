@@ -1,0 +1,1 @@
+SELECT concept.notation FROM logicalDataSet_variable ldsv JOIN concept concept ON ldsv.variable_id = concept.id WHERE ldsv.logicalDataSet_id = '39625a58-4ad9-4acd-a1c0-ae7363444f37';

@@ -1,0 +1,1 @@
+SELECT DISTINCT ls_s.en AS title FROM studyGroup sg JOIN resource r_sg ON r_sg.id=sg.id JOIN langString ls_sg ON ls_sg.id=r_sg.prefLabel_id JOIN study s ON s.studyGroup_id=sg.id JOIN resource r_s ON r_s.id=s.id JOIN langstring ls_s ON ls_s.id=r_s.prefLabel_id WHERE ls_sg.en = 'EU-SILC';
