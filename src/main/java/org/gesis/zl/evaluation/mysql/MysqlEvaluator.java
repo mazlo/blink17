@@ -28,10 +28,6 @@ public class MysqlEvaluator
 
 	private static Logger log = LoggerFactory.getLogger( MysqlEvaluator.class );
 
-	private static final int QUERY_QUEUE_LENGTH = 20;
-	private static final int THREAD_POOL_SIZE = 5;
-	private static final String STATISTICS_OUTPUT_FILE = "target/statistics.mysql";
-
 	// beans
 	private DataSource datasource;
 	private QueryHelper queryHelper;
@@ -56,11 +52,11 @@ public class MysqlEvaluator
 	private void execute() throws InterruptedException
 	{
 		// prepare threads
-		ExecutorService executor = Executors.newFixedThreadPool( THREAD_POOL_SIZE );
+		ExecutorService executor = Executors.newFixedThreadPool( properties.getThreadPoolSize() );
 
 		List<Future<Long>> listOfWorkers = new ArrayList<Future<Long>>();
 
-		String[][] queriesToExecute = queryHelper.shuffleQueriesToExecute( QUERY_QUEUE_LENGTH );
+		String[][] queriesToExecute = queryHelper.shuffleQueriesToExecute( properties.getQueryQueueSize() );
 
 		int totalExecutions = queriesToExecute.length;
 		// int totalExecutions = 10;
@@ -106,7 +102,7 @@ public class MysqlEvaluator
 		if ( totalExecutions == 0 )
 			log.warn( "No executions (threads) due to empty query list" );
 
-		queryHelper.writeResults( STATISTICS_OUTPUT_FILE + "_" + System.currentTimeMillis(), results );
+		queryHelper.writeResults( properties.getStatisticsOutputFilename() + "_" + System.currentTimeMillis(), results );
 
 		log.info( "Finished" );
 	}
