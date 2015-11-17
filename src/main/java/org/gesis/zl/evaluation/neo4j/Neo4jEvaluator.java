@@ -1,4 +1,4 @@
-package org.gesis.zl.evaluation.mysql;
+package org.gesis.zl.evaluation.neo4j;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +10,8 @@ import java.util.concurrent.Future;
 
 import javax.sql.DataSource;
 
+import org.gesis.zl.evaluation.mysql.MysqlEvaluator;
+import org.gesis.zl.evaluation.mysql.MysqlQueryExecutor;
 import org.gesis.zl.evaluation.service.EvaluationProperties;
 import org.gesis.zl.evaluation.service.QueryHelper;
 import org.slf4j.Logger;
@@ -23,9 +25,8 @@ import com.google.common.collect.SetMultimap;
  * @author matthaeus
  * 
  */
-public class MysqlEvaluator
+public class Neo4jEvaluator
 {
-
 	private static Logger log = LoggerFactory.getLogger( MysqlEvaluator.class );
 
 	// beans
@@ -36,7 +37,7 @@ public class MysqlEvaluator
 	// simple properties
 	private SetMultimap<String, Long> results = HashMultimap.create();
 
-	public MysqlEvaluator() throws InterruptedException
+	public Neo4jEvaluator() throws InterruptedException
 	{
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext( "classpath:context.xml" );
 
@@ -49,6 +50,10 @@ public class MysqlEvaluator
 		context.close();
 	}
 
+	/**
+	 * @throws InterruptedException
+	 * 
+	 */
 	private void execute() throws InterruptedException
 	{
 		// prepare threads
@@ -109,6 +114,6 @@ public class MysqlEvaluator
 
 	public static void main( String[] args ) throws InterruptedException
 	{
-		new MysqlEvaluator();
+		new Neo4jEvaluator();
 	}
 }

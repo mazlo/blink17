@@ -20,14 +20,18 @@ public class EvaluationProperties
 	@Value( "#{applicationProperties['server.db.name']}" )
 	private String serverDbName;
 
+	@Value( "#{applicationProperties['statistics.output.filename']}" )
+	private String statisticsOutputFilename;
+
+	@Value( "#{applicationProperties['thread.pool.size']}" )
+	private int threadPoolSize;
+
+	@Value( "#{applicationProperties['query.queue.size']}" )
+	private int queryQueueSize;
+
 	public String getQueriesFolder()
 	{
 		return queriesFolder;
-	}
-
-	public void setQueriesFolder( String queriesFolder )
-	{
-		this.queriesFolder = queriesFolder;
 	}
 
 	public String getServerUrl()
@@ -35,19 +39,24 @@ public class EvaluationProperties
 		return serverUrl;
 	}
 
-	public void setServerUrl( String serverUrl )
-	{
-		this.serverUrl = serverUrl;
-	}
-
 	public String getServerDbName()
 	{
 		return serverDbName;
 	}
 
-	public void setServerDbName( String serverDbName )
+	public String getStatisticsOutputFilename()
 	{
-		this.serverDbName = serverDbName;
+		return statisticsOutputFilename;
+	}
+
+	public int getThreadPoolSize()
+	{
+		return threadPoolSize;
+	}
+
+	public int getQueryQueueSize()
+	{
+		return queryQueueSize;
 	}
 
 }
