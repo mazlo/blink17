@@ -103,9 +103,18 @@ public class MysqlEvaluator
 		if ( totalExecutions == 0 )
 			log.warn( "No executions (threads) due to empty query list" );
 
-		queryHelper.writeResults( properties.getStatisticsOutputFilename() + "_" + System.currentTimeMillis(), results );
+		queryHelper.writeResults( getStatisticsFilename(), results );
 
 		log.info( "Finished" );
+	}
+
+	/**
+	 * @return
+	 */
+	private String getStatisticsFilename()
+	{
+		String[] str = new String[] { properties.getStatisticsOutputFilename(), String.valueOf( properties.getQueryQueueSize() ), String.valueOf( properties.getThreadPoolSize() ), String.valueOf( System.currentTimeMillis() ) };
+		return StringUtils.join( str, "_" );
 	}
 
 	public static void main( String[] args ) throws InterruptedException

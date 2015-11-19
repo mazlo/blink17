@@ -29,7 +29,7 @@ public class MysqlQueryExecutor implements Callable<Long>
 		this.query = query[1];
 	}
 
-	public Long call() throws Exception
+	public Long call()
 	{
 		// execute
 		log.info( "about to execute query {}..", this.queryKey );
