@@ -10,14 +10,15 @@ import java.util.concurrent.Future;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.gesis.zl.evaluation.service.EvaluationProperties;
 import org.gesis.zl.evaluation.service.QueryHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.SetMultimap;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ListMultimap;
 
 /**
  * @author matthaeus
@@ -34,7 +35,7 @@ public class MysqlEvaluator
 	private EvaluationProperties properties;
 
 	// simple properties
-	private SetMultimap<String, Long> results = HashMultimap.create();
+	private ListMultimap<String, Long> results = ArrayListMultimap.create();
 
 	public MysqlEvaluator() throws InterruptedException
 	{

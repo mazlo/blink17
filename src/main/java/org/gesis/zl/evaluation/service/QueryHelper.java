@@ -9,13 +9,13 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Random;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.google.common.collect.SetMultimap;
+import com.google.common.collect.Multimap;
 
 /**
  * @author matthaeus
@@ -100,7 +100,7 @@ public class QueryHelper
 	/**
 	 * @param results
 	 */
-	public void writeResults( String outputFile, SetMultimap<String, Long> results )
+	public void writeResults( String outputFile, Multimap<String, Long> results )
 	{
 		try
 		{
@@ -111,7 +111,7 @@ public class QueryHelper
 
 			for ( String key : results.keySet() )
 			{
-				Set<Long> set = results.get( key );
+				Collection<Long> set = results.get( key );
 				Number sum = avg( set );
 				statsFile.write( key + ";" + sum + ";" + set.size() );
 				statsFile.newLine();
