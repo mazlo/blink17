@@ -41,7 +41,7 @@ public class MysqlEvaluator
 	{
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext( "classpath:context.xml" );
 
-		datasource = context.getBean( DataSource.class );
+		datasource = context.getBean( "dataSourceMysql", DataSource.class );
 		queryHelper = context.getBean( QueryHelper.class );
 		properties = context.getBean( EvaluationProperties.class );
 
