@@ -11,10 +11,7 @@ import org.springframework.stereotype.Service;
 public class EvaluationProperties
 {
 
-	@Value( "#{applicationProperties['queries.folder']}" )
-	private String queriesFolder;
-
-	@Value( "#{applicationProperties['server.url']}" )
+	@Value( "#{applicationProperties['server.db.url']}" )
 	private String serverUrl;
 
 	@Value( "#{applicationProperties['server.db.name']}" )
@@ -22,6 +19,9 @@ public class EvaluationProperties
 
 	@Value( "#{applicationProperties['statistics.output.filename']}" )
 	private String statisticsOutputFilename;
+
+	@Value( "#{applicationProperties['queries.folder']}" )
+	private String queriesFolder;
 
 	@Value( "#{applicationProperties['thread.pool.size']}" )
 	private int threadPoolSize;
