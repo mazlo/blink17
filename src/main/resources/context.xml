@@ -24,17 +24,17 @@
 	<!-- the actual data source -->
 	<bean id="dataSourceMysql" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 	    <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-	    <property name="url" value="jdbc:mysql://${server.mysql.url}/${server.mysql.name}"/>
-	    <property name="username" value="${server.mysql.username}"/>
-	    <property name="password" value="${server.mysql.password}" />
+	    <property name="url" value="jdbc:mysql://${server.db.url}/${server.db.name}"/>
+	    <property name="username" value="${server.db.username}"/>
+	    <property name="password" value="${server.db.password}" />
 	    <property name="validationQuery" value="select 1" />
 	</bean>
 
 	<!-- the actual data source -->
 	<bean id="dataSourceNeo4j" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 		<property name="driverClassName" value="org.neo4j.jdbc.Driver"/>
-		<property name="url" value="jdbc:neo4j://${server.neo4j.url}/"/>
+		<property name="url" value="jdbc:neo4j://${server.db.url}/"/>
 	</bean>
 	
-	<util:properties id="applicationProperties" location="application.properties" />
+	<util:properties id="applicationProperties" location="./application.properties" />
 </beans>
