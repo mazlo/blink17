@@ -8,6 +8,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import org.apache.commons.lang3.StringUtils;
 import org.gesis.zl.evaluation.service.EvaluationProperties;
 import org.gesis.zl.evaluation.service.QueryHelper;
 import org.openrdf.repository.Repository;
@@ -27,10 +28,6 @@ import com.google.common.collect.SetMultimap;
 public class SesameEvaluator
 {
 	private static Logger log = LoggerFactory.getLogger( SesameEvaluator.class );
-
-	private static final int QUERY_QUEUE_LENGTH = 100;
-	private static final int THREAD_POOL_SIZE = 10;
-	private static final String STATISTICS_OUTPUT_FILE = "target/statistics.sesame";
 
 	// beans
 	private QueryHelper queryHelper;
@@ -58,11 +55,11 @@ public class SesameEvaluator
 		repo.initialize();
 
 		// prepare threads
-		ExecutorService executor = Executors.newFixedThreadPool( THREAD_POOL_SIZE );
+		ExecutorService executor = Executors.newFixedThreadPool( properties.getThreadPoolSize() );
 
 		List<Future<Long>> listOfWorkers = new ArrayList<Future<Long>>();
 
-		String[][] queriesToExecute = queryHelper.shuffleQueriesToExecute( QUERY_QUEUE_LENGTH );
+		String[][] queriesToExecute = queryHelper.shuffleQueriesToExecute( properties.getQueryQueueSize() );
 
 		int totalExecutions = queriesToExecute.length;
 		// int totalExecutions = 10;
@@ -105,11 +102,19 @@ public class SesameEvaluator
 			}
 		}
 
-		queryHelper.writeResults( STATISTICS_OUTPUT_FILE + "_" + System.currentTimeMillis(), results );
+		queryHelper.writeResults( getStatisticsFilename(), results );
 
 		log.info( "Finished" );
 	}
 
+	/**
+	 * @return
+	 */
+	private String getStatisticsFilename()
+	{
+		String[] str = new String[] { properties.getStatisticsOutputFilename(), String.valueOf( properties.getQueryQueueSize() ), String.valueOf( properties.getThreadPoolSize() ), String.valueOf( System.currentTimeMillis() ) };
+		return StringUtils.join( str, "_" );
+	}
 	public static void main( String[] args ) throws RepositoryException, InterruptedException, ExecutionException
 	{
 		new SesameEvaluator();
