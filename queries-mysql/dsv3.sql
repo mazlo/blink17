@@ -1,0 +1,1 @@
+SELECT t.id FROM periodOfTime t WHERE t.startDate > t.endDate

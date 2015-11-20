@@ -1,0 +1,1 @@
+SELECT DISTINCT lsq.en  FROM question q JOIN langstring lsq ON lsq.id=q.questionText_id  WHERE lsq.en REGEXP( '.*employee.*' ) ORDER BY lsq.en;

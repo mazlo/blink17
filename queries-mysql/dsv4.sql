@@ -1,0 +1,1 @@
+SELECT cs.id FROM categoryStatistics cs WHERE cs.percentage < 0 OR cs.percentage > 100 OR cs.cumulativePercentage < 0 OR cs.cumulativePercentage > 100

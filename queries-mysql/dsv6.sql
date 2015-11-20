@@ -1,0 +1,1 @@
+SELECT ss.id FROM summaryStatistics ss WHERE ss.numberOfCases != ( ss.numberOfCasesValidOnly + ss.numberOfCasesMissingOnly )

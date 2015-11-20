@@ -1,0 +1,1 @@
+SELECT COUNT( DISTINCT( v.id ) )  FROM concept c  LEFT JOIN variable v ON v.concept_id=c.id  LEFT JOIN logicalDataSet_variable ldsv on ldsv.variable_id=v.id LEFT JOIN logicalDataSet lds on lds.id=ldsv.logicalDataSet_id WHERE c.notation = 'age' AND lds.isPublic=true

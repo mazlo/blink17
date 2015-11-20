@@ -1,0 +1,1 @@
+SELECT t.id FROM periodoftime t WHERE startDate NOT REGEXP '[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}'

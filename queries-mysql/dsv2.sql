@@ -1,0 +1,1 @@
+SELECT c.id FROM concept c JOIN resource r on r.id=c.id WHERE c.notation IS NOT NULL AND c.definition_id IS NOT NULL AND r.prefLabel_id IS NOT NULL
