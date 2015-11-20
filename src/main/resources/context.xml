@@ -24,11 +24,11 @@
 	<!-- the actual data source -->
 	<bean id="dataSourceMysql" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 	    <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-	    <property name="url" value="jdbc:mysql://10.6.49.133:3306/missydb"/>
-	    <property name="username" value="root"/>
-	    <property name="password" value="" />
+	    <property name="url" value="jdbc:mysql://${server.mysql.url}/${server.mysql.name}"/>
+	    <property name="username" value="${server.mysql.username}"/>
+	    <property name="password" value="${server.mysql.password}" />
 	    <property name="validationQuery" value="select 1" />
 	</bean>
 	
-	<util:properties id="applicationProperties" location="classpath:application.properties" />
+	<util:properties id="applicationProperties" location="application.properties" />
 </beans>
