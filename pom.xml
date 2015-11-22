@@ -91,7 +91,7 @@
 			<transformers>
 				<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 					<manifestEntries>
-						<Main-Class>org.gesis.zl.evaluation.sesame.SesameEvaluator</Main-Class>
+						<Main-Class>${mainClass}</Main-Class>
 						<Class-Path>.</Class-Path>
 					</manifestEntries>
 				</transformer>
@@ -131,6 +131,18 @@
 		<activation>
 			<activeByDefault>true</activeByDefault>
 		</activation>
+
+		<properties>
+			<mainClass>org.gesis.zl.evaluation.mysql.MysqlEvaluator</mainClass>
+		</properties>
+	</profile>
+
+	<profile>
+		<id>sesame</id>
+
+		<properties>
+			<mainClass>org.gesis.zl.evaluation.sesame.SesameEvaluator</mainClass>
+		</properties>
 	</profile>
   </profiles>
   
