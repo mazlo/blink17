@@ -10,7 +10,7 @@
 import os
 import time
 
-for tps in ["5","10"]: #,"15","20"]:
+for tps in ["1","5","10","15","20"]:
   os.system( "service mysqld stop" );
   print "dropping caches..";
   os.system( "sync && echo 3 > /proc/sys/vm/drop_caches" );
