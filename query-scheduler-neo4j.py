@@ -10,17 +10,14 @@
 import os
 import time
 
-for tps in ["1","5","10","20"]:
-  print "shutting down apache..";
-  os.system( "/home/matthaeus/Projects/apache-tomcat-6.0.43/bin/shutdown.sh" );
+for tps in ["1"]:#,"5","10","20"]:
+  print "shutting down neo4j..";
+  os.system( "/home/matthaeus/Projects/neo4j-community-2.2.2/bin/neo4j stop" );
   time.sleep(10);
   print "dropping caches..";
   os.system( "sync && echo 3 > /proc/sys/vm/drop_caches" );
-  print "starting apache..";
-  os.system( "su - matthaeus -c \"JAVA_OPTS=\\\"-Xms6G -Xmx6G\\\" /home/matthaeus/Projects/apache-tomcat-6.0.43/bin/startup.sh\"" );
-  time.sleep(10);
-  print "query to initialize db.."
-  os.system( "curl http://localhost:8080/openrdf-workbench/repositories/in-memory-store/query?action=exec\&queryLn=SPARQL\&query=SELECT%28COUNT%28%3Fz%29AS%3Fc%29WHERE{%3Fx%20%3Fy%20%3Fz}LIMIT10" );
+  print "starting neo4j..";
+  os.system( "su - matthaeus -c \"JAVA_OPTS=\\\"-Xmx4G\\\" /home/matthaeus/Projects/neo4j-community-2.2.2/bin/neo4j start\"" );
   time.sleep(10);
   print "setting up thread pool to "+ tps;
   os.system( "sed -i 's/thread.pool.size=.*/thread.pool.size="+ tps +"/' application.properties ");
