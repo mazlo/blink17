@@ -10,6 +10,7 @@ import java.util.concurrent.Future;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.gesis.zl.evaluation.mysql.MysqlEvaluator;
 import org.gesis.zl.evaluation.mysql.MysqlQueryExecutor;
 import org.gesis.zl.evaluation.service.EvaluationProperties;
@@ -27,7 +28,7 @@ import com.google.common.collect.SetMultimap;
  */
 public class Neo4jEvaluator
 {
-	private static Logger log = LoggerFactory.getLogger( MysqlEvaluator.class );
+	private static Logger log = LoggerFactory.getLogger( Neo4jEvaluator.class );
 
 	// beans
 	private DataSource datasource;
@@ -41,7 +42,7 @@ public class Neo4jEvaluator
 	{
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext( "classpath:context.xml" );
 
-		datasource = context.getBean( DataSource.class );
+		datasource = context.getBean( "dataSourceNeo4j", DataSource.class );
 		queryHelper = context.getBean( QueryHelper.class );
 		properties = context.getBean( EvaluationProperties.class );
 
@@ -69,7 +70,7 @@ public class Neo4jEvaluator
 		// start so many threads a there are queries
 		for ( int i = 0; i < totalExecutions; i++ )
 		{
-			Callable<Long> queryExecution = new MysqlQueryExecutor( this.datasource, queriesToExecute[i] );
+			Callable<Long> queryExecution = new Neo4jQueryExecutor( this.datasource, queriesToExecute[i] );
 
 			// execute
 			Future<Long> submitedWorker = executor.submit( queryExecution );
@@ -107,9 +108,18 @@ public class Neo4jEvaluator
 		if ( totalExecutions == 0 )
 			log.warn( "No executions (threads) due to empty query list" );
 
-		queryHelper.writeResults( properties.getStatisticsOutputFilename() + "_" + System.currentTimeMillis(), results );
+		queryHelper.writeResults( getStatisticsFilename(), results );
 
 		log.info( "Finished" );
+	}
+
+	/**
+	 * @return
+	 */
+	private String getStatisticsFilename()
+	{
+		String[] str = new String[] { properties.getStatisticsOutputFilename(), String.valueOf( properties.getQueryQueueSize() ), String.valueOf( properties.getThreadPoolSize() ), String.valueOf( System.currentTimeMillis() ) };
+		return StringUtils.join( str, "_" );
 	}
 
 	public static void main( String[] args ) throws InterruptedException
