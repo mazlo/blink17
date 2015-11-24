@@ -1,8 +1,8 @@
 #!/usr/bin/python
 
-# service mysqld stop
+# service stop
 # sync && echo 3 > /proc/sys/vm/drop_caches
-# service mysqld start
+# service start
 
 # sed -i 's/thread.pool.size=.*/thread.pool.size=15/' application.properties
 # java -jar disco-evaluation-0.0.1-SNAPSHOT.jar

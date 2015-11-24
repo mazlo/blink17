@@ -10,13 +10,11 @@
 import os
 import time
 
-for tps in ["1"]:#,"5","10","20"]:
-  print "shutting down neo4j..";
+for tps in ["1","5","10","20"]:
   os.system( "/home/matthaeus/Projects/neo4j-community-2.2.2/bin/neo4j stop" );
   time.sleep(10);
   print "dropping caches..";
   os.system( "sync && echo 3 > /proc/sys/vm/drop_caches" );
-  print "starting neo4j..";
   os.system( "su - matthaeus -c \"JAVA_OPTS=\\\"-Xmx4G\\\" /home/matthaeus/Projects/neo4j-community-2.2.2/bin/neo4j start\"" );
   time.sleep(10);
   print "setting up thread pool to "+ tps;
