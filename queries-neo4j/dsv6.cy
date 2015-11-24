@@ -1,0 +1,1 @@
+MATCH (v:Variable)<-[:VARIABLE]-(ss:SummaryStatistics) WITH v, ss, SUM(ss.numberOfCasesValidOnly + ss.numberOfCasesMissingOnly) AS noc WHERE noc <> ss.numberOfCases RETURN v.id, ss.numberOfCasesValidOnly, ss.numberOfCasesMissingOnly, ss.numberOfCases;

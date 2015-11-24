@@ -1,0 +1,1 @@
+MATCH (s:Study)-[:INSTRUMENT]->(i:Questionnaire)-[:QUESTION]->(q:Question)-[:QUESTIONTEXT]->(qt), (s)-[:TITLE]->(t) WHERE qt.en =~ '.*hours.*work.*' RETURN DISTINCT t ORDER BY t.en;

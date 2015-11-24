@@ -1,0 +1,1 @@
+MATCH (v:Variable)-[:QUESTION]->(q:Question)-[:QUESTIONTEXT]->(qt), (v)-[:CONCEPT]->(c) WHERE c.notation =~ '.*employe*.*' RETURN DISTINCT qt.en ORDER BY qt.en;

@@ -1,0 +1,1 @@
+MATCH (cs:CategoryStatistics) WHERE ( cs.percentage < 0 OR cs.percentage > 100 ) AND ( cs.cumPercentage < 0 OR cs.cumPercentage > 100 ) RETURN cs

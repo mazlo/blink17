@@ -1,0 +1,1 @@
+MATCH (studyLabel)<-[:PREFLABEL]-(s:Study)-[:INGROUP]->(:StudyGroup)-[:PREFLABEL]->(studyGroupLabel), (s)-[:INSTRUMENT]->(qn:Questionnaire)-[:COUNTRY]->(country), (qn)-[:DESCRIPTION]->(desc), (qn)-[:QUESTION]->(q)-[:QUESTIONTEXT]-(qt) WHERE studyGroupLabel.en = 'EU-SILC' AND studyLabel.en = '2005' AND country.code = 'UK' AND desc.en = 'basic questionnaire' RETURN q;

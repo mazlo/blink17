@@ -1,0 +1,1 @@
+MATCH (studyLabel)<-[:PREFLABEL]-(s:Study)-[:INGROUP]->(sg:StudyGroup)-[:PREFLABEL]->(studyGroupLabel) WHERE studyGroupLabel.en = 'EU-SILC' RETURN studyLabel.en ORDER BY studyLabel.en;

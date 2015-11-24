@@ -1,0 +1,1 @@
+MATCH (c:Concept) WHERE c.notation = '' AND NOT (c)-[:DEFINITION]->() AND NOT (c)-[:PREFLABEL]->() RETURN c;

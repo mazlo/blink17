@@ -1,0 +1,1 @@
+MATCH (sg:StudyGroup)<-[:INGROUP]-(s:Study)-[:PRODUCT]->(:LogicalDataSet)-[:VARIABLE]->(v:Variable),(sg)-[:TITLE]->(title),(sg)-[:ABSTRACT]->(abstract) WHERE v.notation = 'SEX' RETURN DISTINCT title.en, abstract.en ORDER BY title.en;

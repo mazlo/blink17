@@ -1,0 +1,1 @@
+MATCH (lds:LogicalDataSet)-[:VARIABLE]->(variable) WHERE lds.id = '39625a58-4ad9-4acd-a1c0-ae7363444f37' RETURN DISTINCT variable.notation;

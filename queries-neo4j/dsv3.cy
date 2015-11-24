@@ -1,0 +1,1 @@
+MATCH (p:PeriodOfTime) WHERE p.startDate IS NOT NULL AND p.endData IS NOT NULL AND p.startDate > p.endDate RETURN p;

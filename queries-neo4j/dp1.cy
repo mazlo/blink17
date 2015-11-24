@@ -1,0 +1,1 @@
+MATCH (s:StudyGroup)-[:PREFLABEL]->(label) RETURN label.en;

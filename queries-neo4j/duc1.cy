@@ -1,0 +1,1 @@
+MATCH (studyGroupTitle<-[:TITLE]-(:StudyGroup)<-[:INGROUP]-(s:Study)-[:TEMPORAL]->(p),(s)-[:PREFLABEL]->(studyTitle), (s)-[:PUBLISHER]->(agent)-[:PREFLABEL]->(agentLabel) WHERE p.startDate >= '2000' AND p.startDate <= '2007' AND agentLabel.en =~ 'Eurostat.*' RETURN studyGroupTitle.en, studyTitle.en ORDER BY studyGroupTitle.en, studyTitle.en;

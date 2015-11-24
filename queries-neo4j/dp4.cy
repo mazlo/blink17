@@ -1,0 +1,1 @@
+MATCH (studyLabel)<-[:PREFLABEL]-(s:Study)-[:INGROUP]->(sg:StudyGroup)-[:PREFLABEL]->(studyGroupLabel), (s)-[:PRODUCT]->(lds:LogicalDataSet)-[:PREFLABEL]->(datasetLabel) WHERE studyGroupLabel.en = 'EU-SILC' AND studyLabel.en = '2007' AND datasetLabel.en =~ 'cross-sec/.*' RETURN DISTINCT datasetLabel.en;

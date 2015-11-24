@@ -1,0 +1,1 @@
+MATCH (s:Study)-[:PRODUCT]->(lds:LogicalDataSet {isPublic:true})-[:VARIABLE]->(v:Variable), (s)-[:TITLE]->(t) RETURN DISTINCT t, COUNT(v) ORDER BY t.en

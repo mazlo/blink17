@@ -1,0 +1,1 @@
+MATCH (studyLabel)<-[:PREFLABEL]-(s:Study)-[:INGROUP]->(sg:StudyGroup)-[:PREFLABEL]->(studyGroupLabel), (s)-[:PRODUCT]->(lds:LogicalDataSet)-[:PREFLABEL]->(datasetLabel) WHERE studyGroupLabel.en = 'EU-LFS' AND studyLabel.en = '2001' RETURN DISTINCT datasetLabel.en ORDER BY datasetLabel.en;

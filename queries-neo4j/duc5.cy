@@ -1,0 +1,1 @@
+MATCH (qt)<-[:QUESTIONTEXT]-(q:Question)<-[:QUESTION]-(v:Variable)-[:CONCEPT]->(c:Concept)-[b:BROADER*]->(cn:Concept) WHERE c.notation =~ '.*age.*' AND cn.notation =~ '.*Income.*' RETURN DISTINCT qt.en;

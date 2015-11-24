@@ -1,0 +1,1 @@
+MATCH (studyLabel)<-[:PREFLABEL]-(s:Study)-[:INGROUP]->(:StudyGroup)-[:PREFLABEL]->(studyGroupLabel), (s)-[:INSTRUMENT]->(q:Questionnaire)-[:COUNTRY]->(country) WHERE studyGroupLabel.en = 'EU-SILC' AND studyLabel.en = '2005' RETURN DISTINCT country.code;

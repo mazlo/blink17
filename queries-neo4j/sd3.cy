@@ -1,0 +1,1 @@
+MATCH (lds:LogicalDataSet)-[:VARIABLE]->(v:Variable)-[:CONCEPT]->(c:Concept) WHERE lds.isPublic = true AND c.notation = 'Age' RETURN COUNT( DISTINCT v )

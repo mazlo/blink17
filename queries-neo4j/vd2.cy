@@ -1,0 +1,1 @@
+MATCH (studyLabel)<-[:PREFLABEL]-(s:Study)-[:INGROUP]->(sg:StudyGroup)-[:PREFLABEL]->(studyGroupLabel), (s)-[:PRODUCT]->(lds:LogicalDataSet)-[:PREFLABEL]->(datasetLabel), (lds)-[:VARIABLE]->(variable) WHERE studyGroupLabel.en = 'CIS' AND studyLabel.en = '3' AND datasetLabel.en = 'cross-sec' RETURN DISTINCT variable.notation;

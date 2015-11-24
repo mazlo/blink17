@@ -1,0 +1,1 @@
+MATCH (v:Variable {notation: 'AGE'})-[:REPRESENTATION]->(cs:ConceptScheme)-[:HASTOPCONCEPT]->(c)-[:PREFLABEL]->(label) OPTIONAL MATCH (v)-[:QUESTION]->(q) RETURN DISTINCT c.notation, label.en;

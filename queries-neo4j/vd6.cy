@@ -1,0 +1,1 @@
+MATCH (studyLabel)<-[:PREFLABEL]-(s:Study)-[:INGROUP]->(sg:StudyGroup)-[:PREFLABEL]->(studyGroupLabel), (s)-[:PRODUCT]->(lds:LogicalDataSet)-[:PREFLABEL]->(datasetLabel), (lds)-[:VARIABLE]->(variable) WHERE studyGroupLabel.en = 'EU-SILC' AND variable.notation = 'PL080' RETURN DISTINCT studyLabel.en ORDER BY studyLabel.en;

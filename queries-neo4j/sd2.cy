@@ -1,0 +1,1 @@
+MATCH (s:Study)-[:PRODUCT]->(lds:LogicalDataSet {isPublic:true})-[:VARIABLE]->(v:Variable),(s)-[:TITLE]->(t) WITH COUNT(v) AS no_of_v, t WHERE no_of_v > 150 RETURN DISTINCT t, no_of_v ORDER BY t.en;

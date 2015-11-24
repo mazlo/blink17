@@ -1,0 +1,1 @@
+MATCH (q:Question)-[:QUESTIONTEXT]->(qt) WHERE qt.en =~ '.*employee.*' RETURN DISTINCT qt.en ORDER BY qt.en;
