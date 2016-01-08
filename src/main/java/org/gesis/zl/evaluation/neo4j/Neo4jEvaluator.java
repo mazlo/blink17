@@ -8,11 +8,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import javax.sql.DataSource;
-
 import org.apache.commons.lang3.StringUtils;
-import org.gesis.zl.evaluation.mysql.MysqlEvaluator;
-import org.gesis.zl.evaluation.mysql.MysqlQueryExecutor;
 import org.gesis.zl.evaluation.service.EvaluationProperties;
 import org.gesis.zl.evaluation.service.QueryHelper;
 import org.slf4j.Logger;
@@ -31,7 +27,6 @@ public class Neo4jEvaluator
 	private static Logger log = LoggerFactory.getLogger( Neo4jEvaluator.class );
 
 	// beans
-	private DataSource datasource;
 	private QueryHelper queryHelper;
 	private EvaluationProperties properties;
 
@@ -42,7 +37,6 @@ public class Neo4jEvaluator
 	{
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext( "classpath:context.xml" );
 
-		datasource = context.getBean( "dataSourceNeo4j", DataSource.class );
 		queryHelper = context.getBean( QueryHelper.class );
 		properties = context.getBean( EvaluationProperties.class );
 
@@ -70,7 +64,7 @@ public class Neo4jEvaluator
 		// start so many threads a there are queries
 		for ( int i = 0; i < totalExecutions; i++ )
 		{
-			Callable<Long> queryExecution = new Neo4jQueryExecutor( this.datasource, queriesToExecute[i] );
+			Callable<Long> queryExecution = new Neo4jQueryExecutor( properties.getServerUrl() + properties.getServerDbName(), queriesToExecute[i] );
 
 			// execute
 			Future<Long> submitedWorker = executor.submit( queryExecution );
