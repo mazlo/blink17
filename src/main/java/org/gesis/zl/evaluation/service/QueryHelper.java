@@ -52,6 +52,9 @@ public class QueryHelper
 	}
 
 	/**
+	 * Returns a 2-dimensional array with the first dimension being the filename
+	 * and the section the query itself.
+	 * 
 	 * @return
 	 */
 	public String[][] getQueries()
