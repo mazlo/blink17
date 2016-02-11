@@ -4,7 +4,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
+import java.io.IOException;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class QueryShufflerTest
@@ -38,5 +40,13 @@ public class QueryShufflerTest
 		String[][] readAndShuffledQueries = QueryShuffler.readAndShuffle( "queries-mysql", 3 );
 		assertNotNull( readAndShuffledQueries );
 		assertEquals( 108, readAndShuffledQueries.length );
+	}
+
+	@Test
+	@Ignore
+	public void write() throws IOException
+	{
+		String[][] shuffledQueries = QueryShuffler.readAndShuffle( "queries-mysql", 25 );
+		QueryShuffler.writeShuffledQueries( shuffledQueries, "src/main/resources/queries-mysql.properties" );
 	}
 }

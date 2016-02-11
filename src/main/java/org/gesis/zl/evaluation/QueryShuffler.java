@@ -4,17 +4,39 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.Lists;
-
 public class QueryShuffler
 {
 	private static final Logger log = LoggerFactory.getLogger( QueryShuffler.class );
+
+	/**
+	 * 
+	 * @param shuffledQueries
+	 * @param toFile
+	 * @throws IOException
+	 */
+	public static void writeShuffledQueries( final String[][] shuffledQueries, final String toFile ) throws IOException
+	{
+		if ( shuffledQueries.length == 0 )
+			return;
+
+		FileWriter writer = new FileWriter( toFile );
+
+		for ( String[] query : shuffledQueries )
+		{
+			writer.write( query[0] + "=" + query[1] + "\n" );
+		}
+
+		writer.flush();
+		writer.close();
+	}
 
 	/**
 	 * 
@@ -28,7 +50,7 @@ public class QueryShuffler
 		filenamesList = getQueries( fromFolder );
 		filenamesList = multiplyNumberOfQueries( filenamesList, multiplyNumberOfQueries );
 
-		Collections.shuffle( Lists.newArrayList( filenamesList ) );
+		Collections.shuffle( Arrays.asList( filenamesList ) );
 
 		String[][] queries = new String[filenamesList.length][2];
 
