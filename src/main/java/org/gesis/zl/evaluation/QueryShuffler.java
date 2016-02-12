@@ -25,12 +25,12 @@ public class QueryShuffler
 	 * @param fromFolder
 	 * @return
 	 */
-	public static String[][] readAndShuffle( final String fromFolder, final int multiplyNumberOfQueries )
+	public static String[][] readAndShuffle( final String fromFolder, final int totalNoOfQueries )
 	{
 		File[] filenamesList = null;
 
 		filenamesList = getQueries( fromFolder );
-		filenamesList = multiplyNumberOfQueries( filenamesList, multiplyNumberOfQueries );
+		filenamesList = multiplyNumberOfQueries( filenamesList, totalNoOfQueries );
 
 		Collections.shuffle( Arrays.asList( filenamesList ) );
 
@@ -152,19 +152,17 @@ public class QueryShuffler
 	 * @param availableQueries
 	 * @return
 	 */
-	public static File[] multiplyNumberOfQueries( final File[] initialQueries, final int multiplier )
+	public static File[] multiplyNumberOfQueries( final File[] initialQueries, final int totalNoOfQueries )
 	{
-		if ( multiplier <= 1 )
+		if ( totalNoOfQueries <= 1 )
 			return initialQueries;
 
-		int arrayLength = multiplier * initialQueries.length;
-
-		File[] multipliedQueries = new File[arrayLength];
+		File[] multipliedQueries = new File[totalNoOfQueries];
 
 		int index = 0;
-		for ( int i = 0; i < multiplier; i++ )
+		for ( int i = 0; i < totalNoOfQueries; i++ )
 		{
-			for ( int j = 0; j < initialQueries.length; j++ )
+			for ( int j = 0; j < initialQueries.length && index < totalNoOfQueries; j++ )
 			{
 				multipliedQueries[index++] = initialQueries[j];
 			}
