@@ -31,6 +31,8 @@ public class EqualDistributionQueryShuffleService implements QueryShuffleService
 		if ( this.queriesFileList == null || this.queriesFileList.length == 0 )
 			return new String[][] {};
 
+		this.queriesFileList = QueryShuffleHelper.multiplyNumberOfQueries( this.queriesFileList, totalNumberOfQueries );
+
 		Collections.shuffle( Arrays.asList( this.queriesFileList ) );
 
 		return QueryShuffleHelper.mapQueryNameToQuery( this.queriesFileList );
@@ -46,6 +48,18 @@ public class EqualDistributionQueryShuffleService implements QueryShuffleService
 	public void setProperties( Properties properties )
 	{
 		this.properties = properties;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gesis.zl.evaluation.service.query.QueryShuffleService#setQueries(
+	 * java.io.File[])
+	 */
+	public void setQueries( File[] queries )
+	{
+		this.queriesFileList = queries;
 	}
 
 }

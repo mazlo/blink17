@@ -50,4 +50,17 @@ public class ProbabilityDistributionQueryShuffleService implements QueryShuffleS
 		this.properties = properties;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gesis.zl.evaluation.service.query.QueryShuffleService#setQueries(
+	 * java.io.File[])
+	 */
+	public void setQueries( File[] queries )
+	{
+		// TODO Auto-generated method stub
+
+	}
+
 }
