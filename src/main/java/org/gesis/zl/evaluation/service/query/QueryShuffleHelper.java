@@ -2,10 +2,15 @@ package org.gesis.zl.evaluation.service.query;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 
@@ -15,12 +20,65 @@ import java.io.IOException;
 public class QueryShuffleHelper
 {
 
+	private static final Logger log = LoggerFactory.getLogger( QueryShuffleHelper.class );
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.gesis.zl.evaluation.service.query.QueryShuffleService#read(java.lang
+	 * .String, java.lang.String[])
+	 */
+	public static File[] read( final String fromFolder, final String[] availableQueries )
+	{
+		File queryFolder = new File( fromFolder );
+
+		if ( !queryFolder.exists() )
+		{
+			log.error( "Folder {} does not exist", fromFolder );
+			return new File[] {};
+		}
+
+		File[] filenamesList = null;
+
+		if ( availableQueries == null || availableQueries.length == 0 )
+		{
+			filenamesList = queryFolder.listFiles();
+		}
+		else
+		{
+			filenamesList = queryFolder.listFiles( new FileFilter()
+			{
+				public boolean accept( File currentFile )
+				{
+					for ( String filename : availableQueries )
+					{
+						if ( StringUtils.equals( currentFile.getName(), filename ) )
+							return true;
+
+						continue;
+					}
+
+					return false;
+				}
+			} );
+		}
+
+		if ( filenamesList.length == 0 )
+		{
+			log.warn( "No queries in folder {}", fromFolder );
+			return new File[] {};
+		}
+
+		return filenamesList;
+	}
+
 	/**
 	 * 
 	 * @param availableQueries
 	 * @return
 	 */
-	public File[] multiplyNumberOfQueries( final File[] initialQueries, final int totalNoOfQueries )
+	public static File[] multiplyNumberOfQueries( final File[] initialQueries, final int totalNoOfQueries )
 	{
 		if ( totalNoOfQueries <= 1 )
 			return initialQueries;
