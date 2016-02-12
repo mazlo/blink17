@@ -29,7 +29,7 @@ public class QueryShuffleHelper
 	 * org.gesis.zl.evaluation.service.query.QueryShuffleService#read(java.lang
 	 * .String, java.lang.String[])
 	 */
-	public static File[] read( final String fromFolder, final String[] availableQueries )
+	public static File[] read( final String fromFolder, final String... availableQueries )
 	{
 		File queryFolder = new File( fromFolder );
 
@@ -43,18 +43,22 @@ public class QueryShuffleHelper
 
 		if ( availableQueries == null || availableQueries.length == 0 )
 		{
+			// all files in folder
 			filenamesList = queryFolder.listFiles();
 		}
 		else
 		{
+			// filter files in folder
 			filenamesList = queryFolder.listFiles( new FileFilter()
 			{
-				public boolean accept( File currentFile )
+				public boolean accept( final File currentFile )
 				{
 					for ( String filename : availableQueries )
 					{
 						if ( StringUtils.equals( currentFile.getName(), filename ) )
+						{
 							return true;
+						}
 
 						continue;
 					}
@@ -81,7 +85,9 @@ public class QueryShuffleHelper
 	public static File[] multiplyNumberOfQueries( final File[] initialQueries, final int totalNoOfQueries )
 	{
 		if ( totalNoOfQueries <= 1 )
+		{
 			return initialQueries;
+		}
 
 		File[] multipliedQueries = new File[totalNoOfQueries];
 
@@ -102,7 +108,7 @@ public class QueryShuffleHelper
 	 * @param filenamesList
 	 * @return
 	 */
-	public static String[][] mapQueryNameToQuery( File[] filenamesList )
+	public static String[][] mapQueryNameToQuery( final File[] filenamesList )
 	{
 		String[][] queries = new String[filenamesList.length][2];
 
@@ -144,7 +150,9 @@ public class QueryShuffleHelper
 	public static void writeShuffledQueries( final String[][] shuffledQueries, final String toFile ) throws IOException
 	{
 		if ( shuffledQueries.length == 0 )
+		{
 			return;
+		}
 
 		FileWriter writer = new FileWriter( toFile );
 
