@@ -59,7 +59,7 @@ public class SesameEvaluator
 
 		List<Future<Long>> listOfWorkers = new ArrayList<Future<Long>>();
 
-		String[][] queriesToExecute = queryHelper.shuffleQueriesToExecute( properties.getQueryQueueSize() );
+		String[][] queriesToExecute = queryHelper.shuffleQueriesToExecute( properties.getQueriesTotal() );
 
 		int totalExecutions = queriesToExecute.length;
 		// int totalExecutions = 10;
@@ -112,7 +112,7 @@ public class SesameEvaluator
 	 */
 	private String getStatisticsFilename()
 	{
-		String[] str = new String[] { properties.getStatisticsOutputFilename(), String.valueOf( properties.getQueryQueueSize() ), String.valueOf( properties.getThreadPoolSize() ), String.valueOf( System.currentTimeMillis() ) };
+		String[] str = new String[] { properties.getStatisticsOutputFilename(), String.valueOf( properties.getQueriesTotal() ), String.valueOf( properties.getThreadPoolSize() ), String.valueOf( System.currentTimeMillis() ) };
 		return StringUtils.join( str, "_" );
 	}
 	public static void main( String[] args ) throws RepositoryException, InterruptedException, ExecutionException
