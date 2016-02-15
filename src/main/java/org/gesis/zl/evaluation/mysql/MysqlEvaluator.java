@@ -1,5 +1,6 @@
 package org.gesis.zl.evaluation.mysql;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -12,7 +13,9 @@ import javax.sql.DataSource;
 
 import org.apache.commons.lang3.StringUtils;
 import org.gesis.zl.evaluation.service.EvaluationProperties;
-import org.gesis.zl.evaluation.service.QueryHelper;
+import org.gesis.zl.evaluation.service.query.QueryShuffleHelper;
+import org.gesis.zl.evaluation.service.query.QueryShuffleService;
+import org.gesis.zl.evaluation.statistics.StatisticsHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -31,33 +34,66 @@ public class MysqlEvaluator
 
 	// beans
 	private DataSource datasource;
-	private QueryHelper queryHelper;
 	private EvaluationProperties properties;
+	private QueryShuffleService queryShuffleService;
 
 	// simple properties
-	private ListMultimap<String, Long> results = ArrayListMultimap.create();
+	private final ListMultimap<String, Long> results = ArrayListMultimap.create();
+
 
 	public MysqlEvaluator() throws InterruptedException
 	{
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext( "classpath:context.xml" );
 
-		datasource = context.getBean( "dataSourceMysql", DataSource.class );
-		queryHelper = context.getBean( QueryHelper.class );
-		properties = context.getBean( EvaluationProperties.class );
+		loadBeans( context );
 
 		execute();
 
 		context.close();
 	}
 
+	/**
+	 * 
+	 * @param context
+	 */
+	private void loadBeans( final ClassPathXmlApplicationContext context )
+	{
+		this.datasource = context.getBean( "dataSourceMysql", DataSource.class );
+		this.properties = context.getBean( EvaluationProperties.class );
+
+		getQueryShuffleService( context );
+	}
+
+	/**
+	 * 
+	 * @param context
+	 */
+	private void getQueryShuffleService( final ClassPathXmlApplicationContext context )
+	{
+		String queryDistribution = this.properties.getQueriesDistribution();
+
+		if ( StringUtils.isEmpty( queryDistribution ) )
+		{ // default is equal distribution
+			this.queryShuffleService = context.getBean( "equalDistribution", QueryShuffleService.class );
+		}
+		else
+		{ //
+			this.queryShuffleService = context.getBean( queryDistribution, QueryShuffleService.class );
+		}
+
+		File[] queries = QueryShuffleHelper.read( this.properties.getQueriesFolder(), this.properties.getQueriesFiletype(), this.properties.getQueriesAvailable() );
+
+		this.queryShuffleService.setQueries( queries );
+	}
+
 	private void execute() throws InterruptedException
 	{
 		// prepare threads
-		ExecutorService executor = Executors.newFixedThreadPool( properties.getThreadPoolSize() );
+		ExecutorService executor = Executors.newFixedThreadPool( this.properties.getThreadPoolSize() );
 
 		List<Future<Long>> listOfWorkers = new ArrayList<Future<Long>>();
 
-		String[][] queriesToExecute = queryHelper.shuffleQueriesToExecute( properties.getQueriesTotal() );
+		String[][] queriesToExecute = this.queryShuffleService.shuffle( this.properties.getQueriesTotal() );
 
 		int totalExecutions = queriesToExecute.length;
 		// int totalExecutions = 10;
@@ -91,7 +127,7 @@ public class MysqlEvaluator
 			try
 			{
 				ms = executedTask.get();
-				results.put( queriesToExecute[i][0], ms );
+				this.results.put( queriesToExecute[i][0], ms );
 			}
 			catch ( ExecutionException e )
 			{
@@ -101,9 +137,11 @@ public class MysqlEvaluator
 		}
 
 		if ( totalExecutions == 0 )
+		{
 			log.warn( "No executions (threads) due to empty query list" );
+		}
 
-		queryHelper.writeResults( getStatisticsFilename(), results );
+		StatisticsHelper.writeResults( getStatisticsFilename(), this.results );
 
 		log.info( "Finished" );
 	}
@@ -113,11 +151,16 @@ public class MysqlEvaluator
 	 */
 	private String getStatisticsFilename()
 	{
-		String[] str = new String[] { properties.getStatisticsOutputFilename(), String.valueOf( properties.getQueriesTotal() ), String.valueOf( properties.getThreadPoolSize() ), String.valueOf( System.currentTimeMillis() ) };
+		String[] str = new String[] { this.properties.getStatisticsOutputFilename(), String.valueOf( this.properties.getQueriesTotal() ), String.valueOf( this.properties.getThreadPoolSize() ), String.valueOf( System.currentTimeMillis() ) };
 		return StringUtils.join( str, "_" );
 	}
 
-	public static void main( String[] args ) throws InterruptedException
+	public EvaluationProperties getProperties()
+	{
+		return this.properties;
+	}
+
+	public static void main( final String[] args ) throws InterruptedException
 	{
 		new MysqlEvaluator();
 	}

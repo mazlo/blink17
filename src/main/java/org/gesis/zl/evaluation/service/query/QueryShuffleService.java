@@ -1,7 +1,8 @@
 package org.gesis.zl.evaluation.service.query;
 
 import java.io.File;
-import java.util.Properties;
+
+import org.gesis.zl.evaluation.service.EvaluationProperties;
 
 /**
  * 
@@ -19,7 +20,7 @@ public interface QueryShuffleService
 	 * 
 	 * @param properties
 	 */
-	public void setProperties( final Properties properties );
+	public void setProperties( final EvaluationProperties properties );
 
 	/**
 	 * 

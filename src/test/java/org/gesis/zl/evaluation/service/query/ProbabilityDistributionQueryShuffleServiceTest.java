@@ -5,26 +5,32 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.Properties;
 
+import org.gesis.zl.evaluation.service.EvaluationProperties;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+@RunWith( SpringJUnit4ClassRunner.class )
+@ContextConfiguration( locations = { "classpath:context.xml" } )
 public class ProbabilityDistributionQueryShuffleServiceTest
 {
 
+	@Autowired
+	@Qualifier( "probabilityDistribution" )
 	private QueryShuffleService shuffleService;
 
-	private Properties properties;
+	@Autowired
+	private EvaluationProperties properties;
 
 	@Before
 	public void init() throws FileNotFoundException, IOException
 	{
-		this.properties = new Properties();
-		this.properties.load( new FileReader( new File( "src/test/resources/application.properties" ) ) );
-
 		this.shuffleService = new ProbabilityDistributionQueryShuffleService( this.properties );
 	}
 

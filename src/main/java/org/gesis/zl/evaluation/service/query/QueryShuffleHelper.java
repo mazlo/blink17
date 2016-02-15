@@ -29,7 +29,7 @@ public class QueryShuffleHelper
 	 * org.gesis.zl.evaluation.service.query.QueryShuffleService#read(java.lang
 	 * .String, java.lang.String[])
 	 */
-	public static File[] read( final String fromFolder, final String... availableQueries )
+	public static File[] read( final String fromFolder, final String fileType, final String... availableQueries )
 	{
 		File queryFolder = new File( fromFolder );
 
@@ -55,7 +55,7 @@ public class QueryShuffleHelper
 				{
 					for ( String filename : availableQueries )
 					{
-						if ( StringUtils.equals( currentFile.getName(), filename ) )
+						if ( StringUtils.equals( currentFile.getName(), filename.concat( fileType ) ) )
 						{
 							return true;
 						}

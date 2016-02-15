@@ -30,6 +30,7 @@
 	    <property name="validationQuery" value="select 1" />
 	</bean>
 
-	<util:properties id="applicationProperties" location="file:///${project.basedir}/application.properties" />
+
+	<util:properties id="applicationProperties" location="application.properties" />
 	
 </beans>

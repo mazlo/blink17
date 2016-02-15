@@ -1,30 +1,41 @@
 package org.gesis.zl.evaluation.service.query;
 
 import java.io.File;
-import java.util.Properties;
 
-import org.apache.commons.lang3.StringUtils;
+import org.gesis.zl.evaluation.service.EvaluationProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * 
  * @author matthaeus
  * 
  */
+@Service( "probabilityDistribution" )
 public class ProbabilityDistributionQueryShuffleService implements QueryShuffleService
 {
 	private static final Logger log = LoggerFactory.getLogger( ProbabilityDistributionQueryShuffleService.class );
 
-	private Properties properties;
+	@Autowired
+	private EvaluationProperties properties;
 
 	private File[] queriesFileList;
+
+	/**
+	 * required due to spring instantiation
+	 */
+	public ProbabilityDistributionQueryShuffleService()
+	{
+
+	}
 
 	/**
 	 * 
 	 * @param properties
 	 */
-	public ProbabilityDistributionQueryShuffleService( final Properties properties )
+	public ProbabilityDistributionQueryShuffleService( final EvaluationProperties properties )
 	{
 		this.properties = properties;
 	}
@@ -39,7 +50,7 @@ public class ProbabilityDistributionQueryShuffleService implements QueryShuffleS
 	{
 		if ( this.queriesFileList == null || this.queriesFileList.length == 0 )
 		{
-			log.error( "Empty query file list" );
+			log.error( "No queries so shuffle, empty query file list" );
 			return new String[][] {};
 		}
 
@@ -49,16 +60,14 @@ public class ProbabilityDistributionQueryShuffleService implements QueryShuffleS
 			return new String[][] {};
 		}
 
-		String probabilitiesKey = this.properties.getProperty( "queries.probabilities" );
+		String[] probabilityValues = this.properties.getQueriesProbabilities();
 
 		//
-		if ( noProbabilitiesFound( probabilitiesKey ) )
+		if ( noProbabilitiesFound( probabilityValues ) )
 		{
-			log.error( "No probabilities found for property key '{}'", probabilitiesKey );
+			log.error( "No query probabilities found, please specify some" );
 			return new String[][] {};
 		}
-
-		String[] probabilityValues = probabilitiesKey.split( "," );
 
 		//
 		if ( this.queriesFileList.length != probabilityValues.length )
@@ -95,14 +104,14 @@ public class ProbabilityDistributionQueryShuffleService implements QueryShuffleS
 	 * @param keyValue
 	 * @return
 	 */
-	private boolean noProbabilitiesFound( final String keyValue )
+	private boolean noProbabilitiesFound( final String[] keyValue )
 	{
-		if ( StringUtils.isEmpty( keyValue ) )
+		if ( keyValue == null )
 		{
 			return true;
 		}
 
-		if ( keyValue.split( "," ).length == 0 )
+		if ( keyValue.length == 0 )
 		{
 			return true;
 		}
@@ -117,7 +126,7 @@ public class ProbabilityDistributionQueryShuffleService implements QueryShuffleS
 	 * org.gesis.zl.evaluation.service.query.QueryShuffleService#setProperties
 	 * (java.util.Properties)
 	 */
-	public void setProperties( final Properties properties )
+	public void setProperties( final EvaluationProperties properties )
 	{
 		this.properties = properties;
 	}
