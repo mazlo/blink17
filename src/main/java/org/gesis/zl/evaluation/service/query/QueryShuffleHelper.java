@@ -2,10 +2,10 @@ package org.gesis.zl.evaluation.service.query;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.FilenameFilter;
 import java.io.IOException;
 
 import org.apache.commons.lang3.StringUtils;
@@ -22,40 +22,51 @@ public class QueryShuffleHelper
 
 	private static final Logger log = LoggerFactory.getLogger( QueryShuffleHelper.class );
 
-	/*
-	 * (non-Javadoc)
+	/**
 	 * 
-	 * @see
-	 * org.gesis.zl.evaluation.service.query.QueryShuffleService#read(java.lang
-	 * .String, java.lang.String[])
+	 * @return
 	 */
-	public static File[] read( final String fromFolder, final String fileType, final String... availableQueries )
+	public static File[] read( final String fromFile )
+	{
+		File queriesFile = new File( fromFile );
+
+		return null;
+	}
+
+	/**
+	 * 
+	 * @param fromFolder
+	 * @param fileType
+	 * @param availableQueries
+	 * @return
+	 */
+	public static String[] read( final String fromFolder, final String fileType, final String... availableQueries )
 	{
 		File queryFolder = new File( fromFolder );
 
 		if ( !queryFolder.exists() )
 		{
 			log.error( "Folder {} does not exist", fromFolder );
-			return new File[] {};
+			return new String[] {};
 		}
 
-		File[] filenamesList = null;
+		String[] filenamesList = null;
 
 		if ( availableQueries == null || availableQueries.length == 0 )
 		{
 			// all files in folder
-			filenamesList = queryFolder.listFiles();
+			filenamesList = queryFolder.list();
 		}
 		else
 		{
 			// filter files in folder
-			filenamesList = queryFolder.listFiles( new FileFilter()
+			filenamesList = queryFolder.list( new FilenameFilter()
 			{
-				public boolean accept( final File currentFile )
+				public boolean accept( final File file, final String filename )
 				{
-					for ( String filename : availableQueries )
+					for ( String filenameAvailable : availableQueries )
 					{
-						if ( StringUtils.equals( currentFile.getName(), filename.concat( fileType ) ) )
+						if ( StringUtils.equals( filename, filenameAvailable.concat( fileType ) ) )
 						{
 							return true;
 						}
@@ -71,7 +82,7 @@ public class QueryShuffleHelper
 		if ( filenamesList.length == 0 )
 		{
 			log.warn( "No queries in folder {}", fromFolder );
-			return new File[] {};
+			return new String[] {};
 		}
 
 		return filenamesList;
@@ -82,14 +93,14 @@ public class QueryShuffleHelper
 	 * @param availableQueries
 	 * @return
 	 */
-	public static File[] multiplyNumberOfQueries( final File[] initialQueries, final int totalNoOfQueries )
+	public static String[] multiplyNumberOfQueries( final String[] initialQueries, final int totalNoOfQueries )
 	{
 		if ( totalNoOfQueries <= 1 )
 		{
 			return initialQueries;
 		}
 
-		File[] multipliedQueries = new File[totalNoOfQueries];
+		String[] multipliedQueries = new String[totalNoOfQueries];
 
 		int index = 0;
 		for ( int i = 0; i < totalNoOfQueries; i++ )
@@ -108,20 +119,20 @@ public class QueryShuffleHelper
 	 * @param filenamesList
 	 * @return
 	 */
-	public static String[][] mapQueryNameToQuery( final File[] filenamesList )
+	public static String[][] mapQueryNameToQuery( final String[] filenamesList )
 	{
 		String[][] queries = new String[filenamesList.length][2];
 
 		for ( int i = 0; i < filenamesList.length; i++ )
 		{
-			File queryFile = filenamesList[i];
+			String queryFilename = filenamesList[i];
 
-			queries[i][0] = queryFile.getName();
+			queries[i][0] = queryFilename;
 
 			BufferedReader reader;
 			try
 			{
-				reader = new BufferedReader( new FileReader( queryFile ) );
+				reader = new BufferedReader( new FileReader( queryFilename ) );
 
 				String query = reader.readLine();
 				queries[i][1] = query.trim();

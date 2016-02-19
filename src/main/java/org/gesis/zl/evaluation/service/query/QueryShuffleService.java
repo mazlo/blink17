@@ -1,7 +1,5 @@
 package org.gesis.zl.evaluation.service.query;
 
-import java.io.File;
-
 import org.gesis.zl.evaluation.service.EvaluationProperties;
 
 /**
@@ -11,6 +9,11 @@ public interface QueryShuffleService
 {
 
 	/**
+	 * Returns a 2-dimensional array, where the 2nd dimension is an array of the
+	 * size two. It contains the query name as key and the query itself as
+	 * value. For example,<br>
+	 * <br>
+	 * [ [ "Q1", "SELECT * FROM ..." ], [ "Q2", "SELECT * FROM ..." ], ... ]
 	 * 
 	 * @return
 	 */
@@ -26,6 +29,6 @@ public interface QueryShuffleService
 	 * 
 	 * @param queries
 	 */
-	public void setQueries( final File[] queries );
+	public void setQueries( final String[] queries );
 
 }

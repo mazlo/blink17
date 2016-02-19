@@ -1,7 +1,5 @@
 package org.gesis.zl.evaluation.service.query;
 
-import java.io.File;
-
 import org.gesis.zl.evaluation.service.EvaluationProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +19,7 @@ public class ProbabilityDistributionQueryShuffleService implements QueryShuffleS
 	@Autowired
 	private EvaluationProperties properties;
 
-	private File[] queriesFileList;
+	private String[] queryFilenamesList;
 
 	/**
 	 * required due to spring instantiation
@@ -48,7 +46,7 @@ public class ProbabilityDistributionQueryShuffleService implements QueryShuffleS
 	 */
 	public String[][] shuffle( final int totalNumberOfQueries )
 	{
-		if ( this.queriesFileList == null || this.queriesFileList.length == 0 )
+		if ( this.queryFilenamesList == null || this.queryFilenamesList.length == 0 )
 		{
 			log.error( "No queries so shuffle, empty query file list" );
 			return new String[][] {};
@@ -70,13 +68,13 @@ public class ProbabilityDistributionQueryShuffleService implements QueryShuffleS
 		}
 
 		//
-		if ( this.queriesFileList.length != probabilityValues.length )
+		if ( this.queryFilenamesList.length != probabilityValues.length )
 		{
-			log.error( "Number of queries and probability values is not equal. Queries {}, probabilities {}", this.queriesFileList.length, probabilityValues.length );
+			log.error( "Number of queries and probability values is not equal. Queries {}, probabilities {}", this.queryFilenamesList.length, probabilityValues.length );
 			return new String[][] {};
 		}
 
-		File[] totalQueriesFileList = new File[totalNumberOfQueries];
+		String[] totalQueriesFileList = new String[totalNumberOfQueries];
 
 		int index = 0;
 		while ( index < totalNumberOfQueries )
@@ -90,7 +88,7 @@ public class ProbabilityDistributionQueryShuffleService implements QueryShuffleS
 
 				if ( p <= cumulativeProbability )
 				{
-					totalQueriesFileList[index++] = this.queriesFileList[i];
+					totalQueriesFileList[index++] = this.queryFilenamesList[i];
 					break;
 				}
 			}
@@ -138,9 +136,9 @@ public class ProbabilityDistributionQueryShuffleService implements QueryShuffleS
 	 * org.gesis.zl.evaluation.service.query.QueryShuffleService#setQueries(
 	 * java.io.File[])
 	 */
-	public void setQueries( final File[] queries )
+	public void setQueries( final String[] queries )
 	{
-		this.queriesFileList = queries;
+		this.queryFilenamesList = queries;
 	}
 
 }

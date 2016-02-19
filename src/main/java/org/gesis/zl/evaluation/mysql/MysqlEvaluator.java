@@ -81,9 +81,30 @@ public class MysqlEvaluator
 			this.queryShuffleService = context.getBean( queryDistribution, QueryShuffleService.class );
 		}
 
-		File[] queries = QueryShuffleHelper.read( this.properties.getQueriesFolder(), this.properties.getQueriesFiletype(), this.properties.getQueriesAvailable() );
+		String[] queries = loadQueries();
 
 		this.queryShuffleService.setQueries( queries );
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	private String[] loadQueries()
+	{
+		File distributionFile = new File( "queries/" + this.properties.getQueriesDistribution() + ".txt" );
+		String[] queryFiles = null;
+
+		if ( distributionFile.exists() )
+		{ // load queries from file
+
+		}
+		else
+		{ // create distribution with the specified properties
+			queryFiles = QueryShuffleHelper.read( this.properties.getQueriesFolder(), this.properties.getQueriesFiletype(), this.properties.getQueriesAvailable() );
+		}
+
+		return queryFiles;
 	}
 
 	private void execute() throws InterruptedException
