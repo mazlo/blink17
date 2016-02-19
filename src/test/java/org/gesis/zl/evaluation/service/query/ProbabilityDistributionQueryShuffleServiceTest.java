@@ -3,7 +3,6 @@ package org.gesis.zl.evaluation.service.query;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -46,7 +45,7 @@ public class ProbabilityDistributionQueryShuffleServiceTest
 	@Test
 	public void shuffleUnequalLength()
 	{
-		this.shuffleService.setQueries( new File[] { new File( "queries-mysql/dsv1.sql" ) } );
+		this.shuffleService.setQueries( new String[] { "queries-mysql/dsv1.sql" } );
 		String[][] shuffled = this.shuffleService.shuffle( 10 );
 
 		assertNotNull( shuffled );
@@ -56,7 +55,7 @@ public class ProbabilityDistributionQueryShuffleServiceTest
 	@Test
 	public void shuffle()
 	{
-		this.shuffleService.setQueries( new File[] { new File( "queries-mysql/dsv1.sql" ), new File( "queries-mysql/qd2.sql" ) } );
+		this.shuffleService.setQueries( new String[] { "queries-mysql/dsv1.sql", "queries-mysql/qd2.sql" } );
 		String[][] shuffled = this.shuffleService.shuffle( 10 );
 
 		assertNotNull( shuffled );
@@ -66,7 +65,7 @@ public class ProbabilityDistributionQueryShuffleServiceTest
 	@Test
 	public void shuffleFromFolder()
 	{
-		File[] queries = QueryShuffleHelper.read( "queries-mysql", "dp1.sql", "dp2.sql" );
+		String[] queries = QueryShuffleHelper.read( "queries-mysql", "dp1.sql", "dp2.sql" );
 		this.shuffleService.setQueries( queries );
 
 		String[][] shuffled = this.shuffleService.shuffle( 10 );

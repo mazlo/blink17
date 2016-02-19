@@ -3,8 +3,6 @@ package org.gesis.zl.evaluation.service.query;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.io.File;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -44,7 +42,7 @@ public class EqualDistributionQueryShuffleServiceTest
 	@Test
 	public void shuffle()
 	{
-		this.shuffleService.setQueries( new File[] { new File( "queries-mysql/dsv1.sql" ) } );
+		this.shuffleService.setQueries( new String[] { "queries-mysql/dsv1.sql" } );
 
 		String[][] shuffled = this.shuffleService.shuffle( 10 );
 		assertNotNull( shuffled );
