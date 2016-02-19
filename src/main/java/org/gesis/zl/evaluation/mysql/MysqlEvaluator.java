@@ -40,6 +40,7 @@ public class MysqlEvaluator
 	// simple properties
 	private final ListMultimap<String, Long> results = ArrayListMultimap.create();
 
+	private String[][] queriesToExecute;
 
 	public MysqlEvaluator() throws InterruptedException
 	{
@@ -61,14 +62,14 @@ public class MysqlEvaluator
 		this.datasource = context.getBean( "dataSourceMysql", DataSource.class );
 		this.properties = context.getBean( EvaluationProperties.class );
 
-		getQueryShuffleService( context );
+		getQueryShuffleServiceBean( context );
 	}
 
 	/**
 	 * 
 	 * @param context
 	 */
-	private void getQueryShuffleService( final ClassPathXmlApplicationContext context )
+	private void getQueryShuffleServiceBean( final ClassPathXmlApplicationContext context )
 	{
 		String queryDistribution = this.properties.getQueriesDistribution();
 
@@ -81,30 +82,30 @@ public class MysqlEvaluator
 			this.queryShuffleService = context.getBean( queryDistribution, QueryShuffleService.class );
 		}
 
-		String[] queries = loadQueries();
-
-		this.queryShuffleService.setQueries( queries );
+		loadQueries();
 	}
 
 	/**
 	 * 
 	 * @return
 	 */
-	private String[] loadQueries()
+	private void loadQueries()
 	{
 		File distributionFile = new File( "queries/" + this.properties.getQueriesDistribution() + ".txt" );
-		String[] queryFiles = null;
 
 		if ( distributionFile.exists() )
-		{ // load queries from file
-
+		{
+			// load queries from file. We expect them to be already distributed
+			this.queriesToExecute = QueryShuffleHelper.read( distributionFile, this.properties.getQueriesFiletype() );
 		}
 		else
-		{ // create distribution with the specified properties
-			queryFiles = QueryShuffleHelper.read( this.properties.getQueriesFolder(), this.properties.getQueriesFiletype(), this.properties.getQueriesAvailable() );
-		}
+		{
+			String[] queries = QueryShuffleHelper.read( this.properties.getQueriesFolder(), this.properties.getQueriesFiletype(), this.properties.getQueriesAvailable() );
 
-		return queryFiles;
+			// create distribution with the specified properties
+			this.queryShuffleService.setQueries( queries );
+			this.queriesToExecute = this.queryShuffleService.shuffle( this.properties.getQueriesTotal() );
+		}
 	}
 
 	private void execute() throws InterruptedException
@@ -114,15 +115,13 @@ public class MysqlEvaluator
 
 		List<Future<Long>> listOfWorkers = new ArrayList<Future<Long>>();
 
-		String[][] queriesToExecute = this.queryShuffleService.shuffle( this.properties.getQueriesTotal() );
-
-		int totalExecutions = queriesToExecute.length;
+		int totalExecutions = this.queriesToExecute.length;
 		// int totalExecutions = 10;
 
 		// start so many threads a there are queries
 		for ( int i = 0; i < totalExecutions; i++ )
 		{
-			Callable<Long> queryExecution = new MysqlQueryExecutor( this.datasource, queriesToExecute[i] );
+			Callable<Long> queryExecution = new MysqlQueryExecutor( this.datasource, this.queriesToExecute[i] );
 
 			// execute
 			Future<Long> submitedWorker = executor.submit( queryExecution );
@@ -148,7 +147,7 @@ public class MysqlEvaluator
 			try
 			{
 				ms = executedTask.get();
-				this.results.put( queriesToExecute[i][0], ms );
+				this.results.put( this.queriesToExecute[i][0], ms );
 			}
 			catch ( ExecutionException e )
 			{

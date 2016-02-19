@@ -7,10 +7,13 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.Lists;
 
 /**
  * 
@@ -23,14 +26,38 @@ public class QueryShuffleHelper
 	private static final Logger log = LoggerFactory.getLogger( QueryShuffleHelper.class );
 
 	/**
+	 * Expects the <i>fromFile</i> to contain a list of queries on a per line
+	 * basis.
 	 * 
 	 * @return
 	 */
-	public static File[] read( final String fromFile )
+	public static String[][] read( final File fromFile, final String fileType )
 	{
-		File queriesFile = new File( fromFile );
+		List<String> queryFilenamesList = Lists.newArrayList();
 
-		return null;
+		BufferedReader reader;
+		try
+		{
+			reader = new BufferedReader( new FileReader( fromFile ) );
+
+			String queryFilename = null;
+			while ( StringUtils.isNotEmpty( queryFilename = reader.readLine() ) )
+			{
+				queryFilenamesList.add( queryFilename.concat( fileType ) );
+			}
+
+			reader.close();
+		}
+		catch ( FileNotFoundException e )
+		{
+			log.error( "'{}' does not exist", fromFile.getPath() );
+		}
+		catch ( IOException e )
+		{
+			e.printStackTrace();
+		}
+
+		return mapQueryNameToQuery( queryFilenamesList.toArray( new String[] {} ) );
 	}
 
 	/**

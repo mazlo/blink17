@@ -31,4 +31,5 @@ public interface QueryShuffleService
 	 */
 	public void setQueries( final String[] queries );
 
+
 }
