@@ -132,8 +132,8 @@ public class SesameEvaluator implements Evaluator
 		if ( this.properties != null )
 		{
 			log.debug( "Properties set:" );
-			log.debug( "Database url: '{}'", this.properties.getServerUrl() );
-			log.debug( "Database name: '{}'", this.properties.getServerDbName() );
+			log.debug( "Database url: '{}'", this.properties.getDbUrl() );
+			log.debug( "Database name: '{}'", this.properties.getDbName() );
 			log.debug( "Queries folder: '{}'", this.properties.getQueriesFolder() );
 			log.debug( "Queries filetype: '{}'", this.properties.getQueriesFiletype() );
 			log.debug( "Queries distribution: '{}'", this.properties.getQueriesDistribution() );
@@ -151,8 +151,10 @@ public class SesameEvaluator implements Evaluator
 	 */
 	public void execute() throws InterruptedException
 	{
+		log.info( "Executing ... " );
+
 		// initialize repository
-		Repository repo = new HTTPRepository( this.properties.getServerUrl(), this.properties.getServerDbName() );
+		Repository repo = new HTTPRepository( this.properties.getDbUrl(), this.properties.getDbName() );
 		try
 		{
 			repo.initialize();

@@ -129,8 +129,8 @@ public class FourStoreEvaluator implements Evaluator
 		if ( this.properties != null )
 		{
 			log.debug( "Properties set:" );
-			log.debug( "Database url: '{}'", this.properties.getServerUrl() );
-			log.debug( "Database name: '{}'", this.properties.getServerDbName() );
+			log.debug( "Database url: '{}'", this.properties.getDbUrl() );
+			log.debug( "Database name: '{}'", this.properties.getDbName() );
 			log.debug( "Queries folder: '{}'", this.properties.getQueriesFolder() );
 			log.debug( "Queries filetype: '{}'", this.properties.getQueriesFiletype() );
 			log.debug( "Queries distribution: '{}'", this.properties.getQueriesDistribution() );
@@ -157,7 +157,7 @@ public class FourStoreEvaluator implements Evaluator
 		// start so many threads a there are queries
 		for ( int i = 0; i < totalExecutions; i++ )
 		{
-			Callable<Long> queryExecution = new FourStoreQueryExecutor( this.properties.getServerUrl() + this.properties.getServerDbName(), this.queriesToExecute[i] );
+			Callable<Long> queryExecution = new FourStoreQueryExecutor( this.properties.getDbUrl() + this.properties.getDbName(), this.queriesToExecute[i] );
 
 			// execute
 			Future<Long> submitedWorker = executor.submit( queryExecution );

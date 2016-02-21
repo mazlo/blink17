@@ -13,11 +13,20 @@ public class EvaluationProperties
 	@Value( "#{applicationProperties['evaluate']}" )
 	private String evaluator;
 
+	@Value( "#{applicationProperties['server.db.driverClass']}" )
+	private String dbDriverClass;
+
 	@Value( "#{applicationProperties['server.db.url']}" )
-	private String serverUrl;
+	private String dbUrl;
 
 	@Value( "#{applicationProperties['server.db.name']}" )
-	private String serverDbName;
+	private String dbName;
+
+	@Value( "#{applicationProperties['server.db.username']}" )
+	private String dbUsername;
+
+	@Value( "#{applicationProperties['server.db.password']}" )
+	private String dbPassword;
 
 	@Value( "#{applicationProperties['statistics.output.filename']}" )
 	private String statisticsOutputFilename;
@@ -55,14 +64,29 @@ public class EvaluationProperties
 		return this.queriesFolder;
 	}
 
-	public String getServerUrl()
+	public String getDbDriverClass()
 	{
-		return this.serverUrl;
+		return this.dbDriverClass;
 	}
 
-	public String getServerDbName()
+	public String getDbUrl()
 	{
-		return this.serverDbName;
+		return this.dbUrl;
+	}
+
+	public String getDbName()
+	{
+		return this.dbName;
+	}
+
+	public String getDbUsername()
+	{
+		return this.dbUsername;
+	}
+
+	public String getDbPassword()
+	{
+		return this.dbPassword;
 	}
 
 	public String getStatisticsOutputFilename()
