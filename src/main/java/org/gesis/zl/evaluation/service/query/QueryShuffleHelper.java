@@ -185,22 +185,50 @@ public class QueryShuffleHelper
 	 * @param toFile
 	 * @throws IOException
 	 */
-	public static void writeShuffledQueries( final String[][] shuffledQueries, final String toFile ) throws IOException
+	public static void writeToFile( final String[][] shuffledQueries, final String toFile )
 	{
 		if ( shuffledQueries.length == 0 )
 		{
 			return;
 		}
 
-		FileWriter writer = new FileWriter( toFile );
+		File file = new File( toFile );
+		FileWriter writer = null;
 
-		for ( String[] query : shuffledQueries )
+		try
 		{
-			writer.write( query[0] + "=" + query[1] + "\n" );
-		}
+			if ( !file.exists() )
+			{
+				log.info( "Creating file in '{}', because file does not exist", toFile );
+				file.createNewFile();
+			}
 
-		writer.flush();
-		writer.close();
+			writer = new FileWriter( file );
+
+			for ( String[] query : shuffledQueries )
+			{
+				writer.write( query[0] + "\n" );
+			}
+
+			writer.flush();
+			writer.close();
+		}
+		catch ( IOException e )
+		{
+			e.printStackTrace();
+
+			if ( writer != null )
+			{
+				try
+				{
+					writer.close();
+				}
+				catch ( IOException e1 )
+				{
+					e1.printStackTrace();
+				}
+			}
+		}
 	}
 
 }

@@ -90,10 +90,13 @@ public class MysqlEvaluator
 	 */
 	private void loadQueries()
 	{
-		File distributionFile = new File( "queries/" + this.properties.getQueriesDistribution() + ".txt" );
+		String expectedDistributionFilepath = "queries/" + this.properties.getQueriesDistribution() + ".txt";
+
+		File distributionFile = new File( expectedDistributionFilepath );
 
 		if ( distributionFile.exists() )
 		{
+			log.info( "Using distribution file found in '{}' for evaluation", expectedDistributionFilepath );
 			// load queries from file. We expect them to be already distributed
 			this.queriesToExecute = QueryShuffleHelper.readFromFile( this.properties.getQueriesFolder(), distributionFile, this.properties.getQueriesFiletype() );
 		}
@@ -103,6 +106,9 @@ public class MysqlEvaluator
 
 			// create distribution with the specified properties
 			this.queriesToExecute = this.queryShuffleService.shuffle( queries, this.properties.getQueriesTotal() );
+
+			// save for later usage
+			QueryShuffleHelper.writeToFile( this.queriesToExecute, expectedDistributionFilepath );
 		}
 	}
 
