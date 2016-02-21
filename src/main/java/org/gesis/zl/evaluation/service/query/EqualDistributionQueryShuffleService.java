@@ -22,26 +22,24 @@ public class EqualDistributionQueryShuffleService implements QueryShuffleService
 	@Autowired
 	private EvaluationProperties properties;
 
-	private String[] queryFilenamesList;
-
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see org.gesis.zl.evaluation.service.query.QueryShuffleService#shuffle()
 	 */
-	public String[][] shuffle( final int totalNumberOfQueries )
+	public String[][] shuffle( final String[] queryFilenamesList, final int totalNumberOfQueries )
 	{
-		if ( this.queryFilenamesList == null || this.queryFilenamesList.length == 0 )
+		if ( queryFilenamesList == null || queryFilenamesList.length == 0 )
 		{
 			log.info( "No queries to shuffle, empty query file list" );
 			return new String[][] {};
 		}
 
-		this.queryFilenamesList = QueryShuffleHelper.multiplyNumberOfQueries( this.queryFilenamesList, totalNumberOfQueries );
+		String[] totalQueryFilenamesList = QueryShuffleHelper.multiplyNumberOfQueries( queryFilenamesList, totalNumberOfQueries );
 
-		Collections.shuffle( Arrays.asList( this.queryFilenamesList ) );
+		Collections.shuffle( Arrays.asList( totalQueryFilenamesList ) );
 
-		return QueryShuffleHelper.mapQueryNameToQuery( this.queryFilenamesList );
+		return QueryShuffleHelper.mapQueryNameToQuery( this.properties.getQueriesFolder(), totalQueryFilenamesList );
 	}
 
 	/*
@@ -54,18 +52,6 @@ public class EqualDistributionQueryShuffleService implements QueryShuffleService
 	public void setProperties( final EvaluationProperties properties )
 	{
 		this.properties = properties;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.gesis.zl.evaluation.service.query.QueryShuffleService#setQueries(
-	 * java.io.File[])
-	 */
-	public void setQueries( final String[] queries )
-	{
-		this.queryFilenamesList = queries;
 	}
 
 }

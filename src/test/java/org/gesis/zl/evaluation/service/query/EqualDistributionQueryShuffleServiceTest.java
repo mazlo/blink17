@@ -3,7 +3,6 @@ package org.gesis.zl.evaluation.service.query;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,16 +24,10 @@ public class EqualDistributionQueryShuffleServiceTest
 	@Qualifier( "equalDistribution" )
 	private QueryShuffleService shuffleService;
 
-	@Before
-	public void init()
-	{
-		this.shuffleService = new EqualDistributionQueryShuffleService();
-	}
-
 	@Test
 	public void shuffleEmpty()
 	{
-		String[][] shuffled = this.shuffleService.shuffle( 10 );
+		String[][] shuffled = this.shuffleService.shuffle( null, 10 );
 		assertNotNull( shuffled );
 		assertEquals( 0, shuffled.length );
 	}
@@ -42,9 +35,7 @@ public class EqualDistributionQueryShuffleServiceTest
 	@Test
 	public void shuffle()
 	{
-		this.shuffleService.setQueries( new String[] { "queries-mysql/dsv1.sql" } );
-
-		String[][] shuffled = this.shuffleService.shuffle( 10 );
+		String[][] shuffled = this.shuffleService.shuffle( new String[] { "dsv1.sql" }, 10 );
 		assertNotNull( shuffled );
 		assertEquals( 10, shuffled.length );
 

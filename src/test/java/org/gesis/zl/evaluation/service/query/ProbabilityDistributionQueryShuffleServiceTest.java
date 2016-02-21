@@ -3,11 +3,7 @@ package org.gesis.zl.evaluation.service.query;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
 import org.gesis.zl.evaluation.service.EvaluationProperties;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,16 +23,10 @@ public class ProbabilityDistributionQueryShuffleServiceTest
 	@Autowired
 	private EvaluationProperties properties;
 
-	@Before
-	public void init() throws FileNotFoundException, IOException
-	{
-		this.shuffleService = new ProbabilityDistributionQueryShuffleService( this.properties );
-	}
-
 	@Test
 	public void shuffleEmpty()
 	{
-		String[][] shuffled = this.shuffleService.shuffle( 10 );
+		String[][] shuffled = this.shuffleService.shuffle( null, 10 );
 
 		assertNotNull( shuffled );
 		assertTrue( shuffled.length == 0 );
@@ -45,8 +35,7 @@ public class ProbabilityDistributionQueryShuffleServiceTest
 	@Test
 	public void shuffleUnequalLength()
 	{
-		this.shuffleService.setQueries( new String[] { "queries-mysql/dsv1.sql" } );
-		String[][] shuffled = this.shuffleService.shuffle( 10 );
+		String[][] shuffled = this.shuffleService.shuffle( new String[] { "queries-mysql/dsv1.sql" }, 10 );
 
 		assertNotNull( shuffled );
 		assertTrue( shuffled.length == 0 );
@@ -55,8 +44,7 @@ public class ProbabilityDistributionQueryShuffleServiceTest
 	@Test
 	public void shuffle()
 	{
-		this.shuffleService.setQueries( new String[] { "queries-mysql/dsv1.sql", "queries-mysql/qd2.sql" } );
-		String[][] shuffled = this.shuffleService.shuffle( 10 );
+		String[][] shuffled = this.shuffleService.shuffle( new String[] { "dsv1.sql", "qd2.sql" }, 10 );
 
 		assertNotNull( shuffled );
 		assertTrue( shuffled.length == 10 );
@@ -65,10 +53,8 @@ public class ProbabilityDistributionQueryShuffleServiceTest
 	@Test
 	public void shuffleFromFolder()
 	{
-		String[] queries = QueryShuffleHelper.read( "queries-mysql", "dp1.sql", "dp2.sql" );
-		this.shuffleService.setQueries( queries );
-
-		String[][] shuffled = this.shuffleService.shuffle( 10 );
+		String[] queries = QueryShuffleHelper.readFromProperties( "queries-mysql", ".sql", "dp1", "dp2" );
+		String[][] shuffled = this.shuffleService.shuffle( queries, 10 );
 
 		assertNotNull( shuffled );
 		assertTrue( shuffled.length == 10 );
