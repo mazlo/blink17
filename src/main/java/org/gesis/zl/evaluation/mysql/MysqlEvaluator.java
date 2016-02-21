@@ -33,7 +33,6 @@ public class MysqlEvaluator implements Evaluator
 	private static Logger log = LoggerFactory.getLogger( MysqlEvaluator.class );
 
 	// beans
-	private BasicDataSource datasource;
 	private EvaluationProperties properties;
 	private QueryShuffleService queryShuffleService;
 
@@ -41,6 +40,7 @@ public class MysqlEvaluator implements Evaluator
 	private final ListMultimap<String, Long> results = ArrayListMultimap.create();
 
 	private String[][] queriesToExecute;
+
 
 	public MysqlEvaluator() throws InterruptedException
 	{
@@ -61,7 +61,6 @@ public class MysqlEvaluator implements Evaluator
 	 */
 	public void loadBeans( final ClassPathXmlApplicationContext context )
 	{
-		this.datasource = context.getBean( "dataSourceMysql", BasicDataSource.class );
 		this.properties = context.getBean( EvaluationProperties.class );
 
 		getQueryShuffleServiceBean( context );
@@ -125,8 +124,8 @@ public class MysqlEvaluator implements Evaluator
 		if ( this.properties != null )
 		{
 			log.debug( "Properties set:" );
-			log.debug( "Database url: '{}'", this.properties.getServerUrl() );
-			log.debug( "Database name: '{}'", this.properties.getServerDbName() );
+			log.debug( "Database url: '{}'", this.properties.getDbUrl() );
+			log.debug( "Database name: '{}'", this.properties.getDbName() );
 			log.debug( "Queries folder: '{}'", this.properties.getQueriesFolder() );
 			log.debug( "Queries filetype: '{}'", this.properties.getQueriesFiletype() );
 			log.debug( "Queries distribution: '{}'", this.properties.getQueriesDistribution() );
@@ -144,6 +143,12 @@ public class MysqlEvaluator implements Evaluator
 	{
 		log.info( "Executing ..." );
 
+		BasicDataSource datasource = new BasicDataSource();
+		datasource.setDriverClassName( this.properties.getDbDriverClass() );
+		datasource.setUrl( this.properties.getDbUrl() + this.properties.getDbName() );
+		datasource.setUsername( this.properties.getDbUsername() );
+		datasource.setPassword( this.properties.getDbPassword() );
+
 		// prepare threads
 		ExecutorService executor = Executors.newFixedThreadPool( this.properties.getThreadPoolSize() );
 
@@ -155,7 +160,7 @@ public class MysqlEvaluator implements Evaluator
 		// start so many threads a there are queries
 		for ( int i = 0; i < totalExecutions; i++ )
 		{
-			Callable<Long> queryExecution = new MysqlQueryExecutor( this.datasource, this.queriesToExecute[i] );
+			Callable<Long> queryExecution = new MysqlQueryExecutor( datasource, this.queriesToExecute[i] );
 
 			// execute
 			Future<Long> submitedWorker = executor.submit( queryExecution );
