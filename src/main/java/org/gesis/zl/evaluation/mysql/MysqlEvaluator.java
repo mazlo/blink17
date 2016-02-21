@@ -11,6 +11,7 @@ import java.util.concurrent.Future;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.lang3.StringUtils;
+import org.gesis.zl.evaluation.Evaluator;
 import org.gesis.zl.evaluation.service.EvaluationProperties;
 import org.gesis.zl.evaluation.service.query.QueryShuffleHelper;
 import org.gesis.zl.evaluation.service.query.QueryShuffleService;
@@ -26,7 +27,7 @@ import com.google.common.collect.ListMultimap;
  * @author matthaeus
  * 
  */
-public class MysqlEvaluator
+public class MysqlEvaluator implements Evaluator
 {
 
 	private static Logger log = LoggerFactory.getLogger( MysqlEvaluator.class );
@@ -55,11 +56,10 @@ public class MysqlEvaluator
 		context.close();
 	}
 
-	/**
-	 * 
-	 * @param context
+	/* (non-Javadoc)
+	 * @see org.gesis.zl.evaluation.mysql.Evaluator#loadBeans(org.springframework.context.support.ClassPathXmlApplicationContext)
 	 */
-	private void loadBeans( final ClassPathXmlApplicationContext context )
+	public void loadBeans( final ClassPathXmlApplicationContext context )
 	{
 		this.datasource = context.getBean( "dataSourceMysql", BasicDataSource.class );
 		this.properties = context.getBean( EvaluationProperties.class );
@@ -87,11 +87,10 @@ public class MysqlEvaluator
 		}
 	}
 
-	/**
-	 * 
-	 * @return
+	/* (non-Javadoc)
+	 * @see org.gesis.zl.evaluation.mysql.Evaluator#loadQueries()
 	 */
-	private void loadQueries()
+	public void loadQueries()
 	{
 		String expectedDistributionFilepath = "queries/" + this.properties.getQueriesDistribution() + ".txt";
 
@@ -118,10 +117,10 @@ public class MysqlEvaluator
 		}
 	}
 
-	/**
-	 * 
+	/* (non-Javadoc)
+	 * @see org.gesis.zl.evaluation.mysql.Evaluator#debugProperties()
 	 */
-	private void debugProperties()
+	public void debugProperties()
 	{
 		if ( this.properties != null )
 		{
@@ -138,11 +137,10 @@ public class MysqlEvaluator
 		}
 	}
 
-	/**
-	 * 
-	 * @throws InterruptedException
+	/* (non-Javadoc)
+	 * @see org.gesis.zl.evaluation.mysql.Evaluator#execute()
 	 */
-	private void execute() throws InterruptedException
+	public void execute() throws InterruptedException
 	{
 		log.info( "Executing ..." );
 
@@ -210,11 +208,6 @@ public class MysqlEvaluator
 	{
 		String[] str = new String[] { this.properties.getStatisticsOutputFilename(), String.valueOf( this.properties.getQueriesTotal() ), String.valueOf( this.properties.getThreadPoolSize() ), String.valueOf( System.currentTimeMillis() ) };
 		return StringUtils.join( str, "_" );
-	}
-
-	public EvaluationProperties getProperties()
-	{
-		return this.properties;
 	}
 
 	public static void main( final String[] args ) throws InterruptedException
