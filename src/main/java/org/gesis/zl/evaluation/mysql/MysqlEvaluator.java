@@ -47,6 +47,7 @@ public class MysqlEvaluator
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext( "classpath:context.xml" );
 
 		loadBeans( context );
+		loadQueries();
 
 		execute();
 
@@ -81,8 +82,6 @@ public class MysqlEvaluator
 		{ //
 			this.queryShuffleService = context.getBean( queryDistribution, QueryShuffleService.class );
 		}
-
-		loadQueries();
 	}
 
 	/**
