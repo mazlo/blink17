@@ -31,7 +31,7 @@ public class QueryShuffleHelper
 	 * 
 	 * @return
 	 */
-	public static String[][] read( final File fromFile, final String fileType )
+	public static String[][] readFromFile( final String inFolder, final File fromFile, final String fileType )
 	{
 		List<String> queryFilenamesList = Lists.newArrayList();
 
@@ -57,7 +57,7 @@ public class QueryShuffleHelper
 			e.printStackTrace();
 		}
 
-		return mapQueryNameToQuery( queryFilenamesList.toArray( new String[] {} ) );
+		return mapQueryNameToQuery( inFolder, queryFilenamesList.toArray( new String[] {} ) );
 	}
 
 	/**
@@ -67,7 +67,7 @@ public class QueryShuffleHelper
 	 * @param availableQueries
 	 * @return
 	 */
-	public static String[] read( final String fromFolder, final String fileType, final String... availableQueries )
+	public static String[] readFromProperties( final String fromFolder, final String fileType, final String... availableQueries )
 	{
 		File queryFolder = new File( fromFolder );
 
@@ -108,7 +108,7 @@ public class QueryShuffleHelper
 
 		if ( filenamesList.length == 0 )
 		{
-			log.warn( "No queries in folder {}", fromFolder );
+			log.warn( "No queries in folder '{}'", fromFolder );
 			return new String[] {};
 		}
 
@@ -146,7 +146,7 @@ public class QueryShuffleHelper
 	 * @param filenamesList
 	 * @return
 	 */
-	public static String[][] mapQueryNameToQuery( final String[] filenamesList )
+	public static String[][] mapQueryNameToQuery( final String inFolder, final String[] filenamesList )
 	{
 		String[][] queries = new String[filenamesList.length][2];
 
@@ -159,7 +159,7 @@ public class QueryShuffleHelper
 			BufferedReader reader;
 			try
 			{
-				reader = new BufferedReader( new FileReader( queryFilename ) );
+				reader = new BufferedReader( new FileReader( inFolder + "/" + queryFilename ) );
 
 				String query = reader.readLine();
 				queries[i][1] = query.trim();

@@ -95,15 +95,14 @@ public class MysqlEvaluator
 		if ( distributionFile.exists() )
 		{
 			// load queries from file. We expect them to be already distributed
-			this.queriesToExecute = QueryShuffleHelper.read( distributionFile, this.properties.getQueriesFiletype() );
+			this.queriesToExecute = QueryShuffleHelper.readFromFile( this.properties.getQueriesFolder(), distributionFile, this.properties.getQueriesFiletype() );
 		}
 		else
 		{
-			String[] queries = QueryShuffleHelper.read( this.properties.getQueriesFolder(), this.properties.getQueriesFiletype(), this.properties.getQueriesAvailable() );
+			String[] queries = QueryShuffleHelper.readFromProperties( this.properties.getQueriesFolder(), this.properties.getQueriesFiletype(), this.properties.getQueriesAvailable() );
 
 			// create distribution with the specified properties
-			this.queryShuffleService.setQueries( queries );
-			this.queriesToExecute = this.queryShuffleService.shuffle( this.properties.getQueriesTotal() );
+			this.queriesToExecute = this.queryShuffleService.shuffle( queries, this.properties.getQueriesTotal() );
 		}
 	}
 
