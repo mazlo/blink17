@@ -9,8 +9,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import javax.sql.DataSource;
-
+import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.lang3.StringUtils;
 import org.gesis.zl.evaluation.service.EvaluationProperties;
 import org.gesis.zl.evaluation.service.query.QueryShuffleHelper;
@@ -33,7 +32,7 @@ public class MysqlEvaluator
 	private static Logger log = LoggerFactory.getLogger( MysqlEvaluator.class );
 
 	// beans
-	private DataSource datasource;
+	private BasicDataSource datasource;
 	private EvaluationProperties properties;
 	private QueryShuffleService queryShuffleService;
 
@@ -60,10 +59,12 @@ public class MysqlEvaluator
 	 */
 	private void loadBeans( final ClassPathXmlApplicationContext context )
 	{
-		this.datasource = context.getBean( "dataSourceMysql", DataSource.class );
+		this.datasource = context.getBean( "dataSourceMysql", BasicDataSource.class );
 		this.properties = context.getBean( EvaluationProperties.class );
 
 		getQueryShuffleServiceBean( context );
+
+		debugProperties();
 	}
 
 	/**
@@ -112,6 +113,26 @@ public class MysqlEvaluator
 
 			// save for later usage
 			QueryShuffleHelper.writeToFile( this.queriesToExecute, expectedDistributionFilepath );
+		}
+	}
+
+	/**
+	 * 
+	 */
+	private void debugProperties()
+	{
+		if ( this.properties != null )
+		{
+			log.debug( "Properties set:" );
+			log.debug( "Database url: '{}'", this.properties.getServerUrl() );
+			log.debug( "Database name: '{}'", this.properties.getServerDbName() );
+			log.debug( "Queries folder: '{}'", this.properties.getQueriesFolder() );
+			log.debug( "Queries filetype: '{}'", this.properties.getQueriesFiletype() );
+			log.debug( "Queries distribution: '{}'", this.properties.getQueriesDistribution() );
+			log.debug( "Queries total: '{}'", this.properties.getQueriesTotal() );
+			log.debug( "Queries available: '{}'", this.properties.getQueriesAvailable() );
+			log.debug( "Queries probabilities: '{}'", this.properties.getQueriesProbabilities() );
+			log.debug( "Thread pool size: '{}'", this.properties.getThreadPoolSize() );
 		}
 	}
 
