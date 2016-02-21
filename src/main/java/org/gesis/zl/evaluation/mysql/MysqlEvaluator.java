@@ -43,6 +43,8 @@ public class MysqlEvaluator
 
 	public MysqlEvaluator() throws InterruptedException
 	{
+		log.info( "Started mysql evaluator" );
+
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext( "classpath:context.xml" );
 
 		loadBeans( context );
@@ -136,8 +138,14 @@ public class MysqlEvaluator
 		}
 	}
 
+	/**
+	 * 
+	 * @throws InterruptedException
+	 */
 	private void execute() throws InterruptedException
 	{
+		log.info( "Executing ..." );
+
 		// prepare threads
 		ExecutorService executor = Executors.newFixedThreadPool( this.properties.getThreadPoolSize() );
 
@@ -166,8 +174,9 @@ public class MysqlEvaluator
 			// wait to terminate
 		}
 
+		log.info( "Collect results" );
+
 		// collect results
-		log.info( "collect results" );
 		for ( int i = 0; i < totalExecutions; i++ )
 		{
 			Future<Long> executedTask = listOfWorkers.get( i );
