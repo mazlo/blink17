@@ -19,36 +19,17 @@ public class ProbabilityDistributionQueryShuffleService implements QueryShuffleS
 	@Autowired
 	private EvaluationProperties properties;
 
-	private String[] queryFilenamesList;
-
-	/**
-	 * required due to spring instantiation
-	 */
-	public ProbabilityDistributionQueryShuffleService()
-	{
-
-	}
-
-	/**
-	 * 
-	 * @param properties
-	 */
-	public ProbabilityDistributionQueryShuffleService( final EvaluationProperties properties )
-	{
-		this.properties = properties;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see
 	 * org.gesis.zl.evaluation.service.query.QueryShuffleService#shuffle(int)
 	 */
-	public String[][] shuffle( final int totalNumberOfQueries )
+	public String[][] shuffle( final String[] queryFilenamesList, final int totalNumberOfQueries )
 	{
-		if ( this.queryFilenamesList == null || this.queryFilenamesList.length == 0 )
+		if ( queryFilenamesList == null || queryFilenamesList.length == 0 )
 		{
-			log.error( "No queries so shuffle, empty query file list" );
+			log.error( "No queries to shuffle, empty query file list" );
 			return new String[][] {};
 		}
 
@@ -68,9 +49,9 @@ public class ProbabilityDistributionQueryShuffleService implements QueryShuffleS
 		}
 
 		//
-		if ( this.queryFilenamesList.length != probabilityValues.length )
+		if ( queryFilenamesList.length != probabilityValues.length )
 		{
-			log.error( "Number of queries and probability values is not equal. Queries {}, probabilities {}", this.queryFilenamesList.length, probabilityValues.length );
+			log.error( "Number of queries and probability values is not equal. Queries {}, probabilities {}", queryFilenamesList.length, probabilityValues.length );
 			return new String[][] {};
 		}
 
@@ -88,13 +69,13 @@ public class ProbabilityDistributionQueryShuffleService implements QueryShuffleS
 
 				if ( p <= cumulativeProbability )
 				{
-					totalQueriesFileList[index++] = this.queryFilenamesList[i];
+					totalQueriesFileList[index++] = queryFilenamesList[i];
 					break;
 				}
 			}
 		}
 
-		return QueryShuffleHelper.mapQueryNameToQuery( totalQueriesFileList );
+		return QueryShuffleHelper.mapQueryNameToQuery( this.properties.getQueriesFolder(), totalQueriesFileList );
 	}
 
 	/**
@@ -127,18 +108,6 @@ public class ProbabilityDistributionQueryShuffleService implements QueryShuffleS
 	public void setProperties( final EvaluationProperties properties )
 	{
 		this.properties = properties;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.gesis.zl.evaluation.service.query.QueryShuffleService#setQueries(
-	 * java.io.File[])
-	 */
-	public void setQueries( final String[] queries )
-	{
-		this.queryFilenamesList = queries;
 	}
 
 }

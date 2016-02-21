@@ -17,19 +17,12 @@ public interface QueryShuffleService
 	 * 
 	 * @return
 	 */
-	public String[][] shuffle( final int totalNumberOfQueries );
+	public String[][] shuffle( final String[] queries, final int totalNumberOfQueries );
 
 	/**
 	 * 
 	 * @param properties
 	 */
 	public void setProperties( final EvaluationProperties properties );
-
-	/**
-	 * 
-	 * @param queries
-	 */
-	public void setQueries( final String[] queries );
-
 
 }
