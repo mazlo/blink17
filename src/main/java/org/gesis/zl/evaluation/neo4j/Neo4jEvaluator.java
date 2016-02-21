@@ -41,7 +41,12 @@ public class Neo4jEvaluator implements Evaluator
 
 	public Neo4jEvaluator() throws InterruptedException
 	{
+		log.info( "Started neo4j evaluator" );
+
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext( "classpath:context.xml" );
+
+		loadBeans( context );
+		loadQueries();
 
 		execute();
 
