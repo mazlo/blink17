@@ -27,6 +27,8 @@ public class ProbabilityDistributionQueryShuffleService implements QueryShuffleS
 	 */
 	public String[][] shuffle( final String[] queryFilenamesList, final int totalNumberOfQueries )
 	{
+		log.info( "Shuffling queries" );
+
 		if ( queryFilenamesList == null || queryFilenamesList.length == 0 )
 		{
 			log.error( "No queries to shuffle, empty query file list" );
@@ -47,6 +49,8 @@ public class ProbabilityDistributionQueryShuffleService implements QueryShuffleS
 			log.error( "No query probabilities found, please specify some" );
 			return new String[][] {};
 		}
+
+		log.debug( "Found {} probabilities", probabilityValues.length );
 
 		//
 		if ( queryFilenamesList.length != probabilityValues.length )

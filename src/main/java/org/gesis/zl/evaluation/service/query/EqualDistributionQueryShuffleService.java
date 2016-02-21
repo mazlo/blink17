@@ -31,11 +31,13 @@ public class EqualDistributionQueryShuffleService implements QueryShuffleService
 	{
 		if ( queryFilenamesList == null || queryFilenamesList.length == 0 )
 		{
-			log.info( "No queries to shuffle, empty query file list" );
+			log.warn( "No queries to shuffle, empty query file list" );
 			return new String[][] {};
 		}
 
 		String[] totalQueryFilenamesList = QueryShuffleHelper.multiplyNumberOfQueries( queryFilenamesList, totalNumberOfQueries );
+
+		log.info( "Shuffling queries" );
 
 		Collections.shuffle( Arrays.asList( totalQueryFilenamesList ) );
 

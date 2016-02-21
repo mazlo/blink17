@@ -97,11 +97,14 @@ public class MysqlEvaluator
 		if ( distributionFile.exists() )
 		{
 			log.info( "Using distribution file found in '{}' for evaluation", expectedDistributionFilepath );
+
 			// load queries from file. We expect them to be already distributed
 			this.queriesToExecute = QueryShuffleHelper.readFromFile( this.properties.getQueriesFolder(), distributionFile, this.properties.getQueriesFiletype() );
 		}
 		else
 		{
+			log.info( "No distribution file found in '{}', creating my own distribution", expectedDistributionFilepath );
+
 			String[] queries = QueryShuffleHelper.readFromProperties( this.properties.getQueriesFolder(), this.properties.getQueriesFiletype(), this.properties.getQueriesAvailable() );
 
 			// create distribution with the specified properties

@@ -33,6 +33,8 @@ public class QueryShuffleHelper
 	 */
 	public static String[][] readFromFile( final String inFolder, final File fromFile, final String fileType )
 	{
+		log.info( "Reading queries specified in file '{}'", fromFile.getPath() );
+
 		List<String> queryFilenamesList = Lists.newArrayList();
 
 		BufferedReader reader;
@@ -57,6 +59,8 @@ public class QueryShuffleHelper
 			e.printStackTrace();
 		}
 
+		log.info( "Found {} queries", queryFilenamesList.size() );
+
 		return mapQueryNameToQuery( inFolder, queryFilenamesList.toArray( new String[] {} ) );
 	}
 
@@ -69,6 +73,8 @@ public class QueryShuffleHelper
 	 */
 	public static String[] readFromProperties( final String fromFolder, final String fileType, final String... availableQueries )
 	{
+		log.info( "Reading queries according to property file" );
+
 		File queryFolder = new File( fromFolder );
 
 		if ( !queryFolder.exists() )
@@ -77,15 +83,23 @@ public class QueryShuffleHelper
 			return new String[] {};
 		}
 
+		log.debug( "Folder holding queries is '{}'", queryFolder.getPath() );
+
 		String[] filenamesList = null;
 
 		if ( availableQueries == null || availableQueries.length == 0 )
 		{
+			log.debug( "Using all queries in folder" );
+
 			// all files in folder
 			filenamesList = queryFolder.list();
+
+			log.debug( "Found {} queries in query folder", filenamesList.length );
 		}
 		else
 		{
+			log.debug( "Filtering queries according to property" );
+
 			// filter files in folder
 			filenamesList = queryFolder.list( new FilenameFilter()
 			{
@@ -112,6 +126,8 @@ public class QueryShuffleHelper
 			return new String[] {};
 		}
 
+		log.info( "Found {} queries", filenamesList.length );
+
 		return filenamesList;
 	}
 
@@ -122,10 +138,14 @@ public class QueryShuffleHelper
 	 */
 	public static String[] multiplyNumberOfQueries( final String[] initialQueries, final int totalNoOfQueries )
 	{
+		log.info( "Multiplying queries" );
+
 		if ( totalNoOfQueries <= 1 )
 		{
 			return initialQueries;
 		}
+
+		log.info( "initial {} -> total {}", initialQueries.length, totalNoOfQueries );
 
 		String[] multipliedQueries = new String[totalNoOfQueries];
 
@@ -148,6 +168,8 @@ public class QueryShuffleHelper
 	 */
 	public static String[][] mapQueryNameToQuery( final String inFolder, final String[] filenamesList )
 	{
+		log.info( "Mapping actual queries to query names" );
+
 		String[][] queries = new String[filenamesList.length][2];
 
 		for ( int i = 0; i < filenamesList.length; i++ )
