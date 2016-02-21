@@ -1,41 +1,47 @@
 package org.gesis.zl.evaluation.service.query;
 
-import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Properties;
 
+import org.gesis.zl.evaluation.service.EvaluationProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * 
  * @author matthaeus
  * 
  */
+@Service( "equalDistribution" )
 public class EqualDistributionQueryShuffleService implements QueryShuffleService
 {
 	private static final Logger log = LoggerFactory.getLogger( EqualDistributionQueryShuffleService.class );
 
-	private Properties properties;
-
-	private File[] queriesFileList;
+	@Autowired
+	private EvaluationProperties properties;
 
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see org.gesis.zl.evaluation.service.query.QueryShuffleService#shuffle()
 	 */
-	public String[][] shuffle( final int totalNumberOfQueries )
+	public String[][] shuffle( final String[] queryFilenamesList, final int totalNumberOfQueries )
 	{
-		if ( this.queriesFileList == null || this.queriesFileList.length == 0 )
+		if ( queryFilenamesList == null || queryFilenamesList.length == 0 )
+		{
+			log.warn( "No queries to shuffle, empty query file list" );
 			return new String[][] {};
+		}
 
-		this.queriesFileList = QueryShuffleHelper.multiplyNumberOfQueries( this.queriesFileList, totalNumberOfQueries );
+		String[] totalQueryFilenamesList = QueryShuffleHelper.multiplyNumberOfQueries( queryFilenamesList, totalNumberOfQueries );
 
-		Collections.shuffle( Arrays.asList( this.queriesFileList ) );
+		log.info( "Shuffling queries" );
 
-		return QueryShuffleHelper.mapQueryNameToQuery( this.queriesFileList );
+		Collections.shuffle( Arrays.asList( totalQueryFilenamesList ) );
+
+		return QueryShuffleHelper.mapQueryNameToQuery( this.properties.getQueriesFolder(), totalQueryFilenamesList );
 	}
 
 	/*
@@ -45,21 +51,9 @@ public class EqualDistributionQueryShuffleService implements QueryShuffleService
 	 * org.gesis.zl.evaluation.service.query.QueryShuffleService#setProperties
 	 * (java.util.Properties)
 	 */
-	public void setProperties( Properties properties )
+	public void setProperties( final EvaluationProperties properties )
 	{
 		this.properties = properties;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.gesis.zl.evaluation.service.query.QueryShuffleService#setQueries(
-	 * java.io.File[])
-	 */
-	public void setQueries( File[] queries )
-	{
-		this.queriesFileList = queries;
 	}
 
 }

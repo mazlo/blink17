@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class EvaluationProperties
 {
+	@Value( "#{applicationProperties['evaluate']}" )
+	private String evaluator;
 
 	@Value( "#{applicationProperties['server.db.url']}" )
 	private String serverUrl;
@@ -23,40 +25,79 @@ public class EvaluationProperties
 	@Value( "#{applicationProperties['queries.folder']}" )
 	private String queriesFolder;
 
+	@Value( "#{applicationProperties['queries.filetype']}" )
+	private String queriesFiletype;
+
+	@Value( "#{applicationProperties['queries.total']}" )
+	private int queriesTotal;
+
+	@Value( "#{applicationProperties['queries.probabilities']}" )
+	private String[] queriesProbabilities;
+
+	@Value( "#{applicationProperties['queries.available']}" )
+	private String[] queriesAvailable;
+
+	@Value( "#{applicationProperties['queries.distribution']}" )
+	private String queriesDistribution;
+
 	@Value( "#{applicationProperties['thread.pool.size']}" )
 	private int threadPoolSize;
 
-	@Value( "#{applicationProperties['query.queue.size']}" )
-	private int queryQueueSize;
+	/* getter / setter */
+
+	public String getEvaluator()
+	{
+		return this.evaluator;
+	}
 
 	public String getQueriesFolder()
 	{
-		return queriesFolder;
+		return this.queriesFolder;
 	}
 
 	public String getServerUrl()
 	{
-		return serverUrl;
+		return this.serverUrl;
 	}
 
 	public String getServerDbName()
 	{
-		return serverDbName;
+		return this.serverDbName;
 	}
 
 	public String getStatisticsOutputFilename()
 	{
-		return statisticsOutputFilename;
+		return this.statisticsOutputFilename;
 	}
 
 	public int getThreadPoolSize()
 	{
-		return threadPoolSize;
+		return this.threadPoolSize;
 	}
 
-	public int getQueryQueueSize()
+	public int getQueriesTotal()
 	{
-		return queryQueueSize;
+		return this.queriesTotal;
+	}
+
+	public String getQueriesFiletype()
+	{
+		return this.queriesFiletype;
+	}
+
+	public String[] getQueriesProbabilities()
+	{
+		return this.queriesProbabilities;
+	}
+
+	public String[] getQueriesAvailable()
+	{
+		return this.queriesAvailable;
+	}
+
+	public String getQueriesDistribution()
+	{
+		return this.queriesDistribution;
 	}
 
 }
