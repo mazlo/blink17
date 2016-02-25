@@ -7,10 +7,12 @@ import org.apache.commons.lang3.text.WordUtils;
 import org.gesis.zl.evaluation.service.EvaluationProperties;
 import org.gesis.zl.evaluation.service.query.QueryShuffleHelper;
 import org.gesis.zl.evaluation.service.query.QueryShuffleService;
+import org.gesis.zl.evaluation.statistics.StatisticsHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Sets;
 
 /**
@@ -29,6 +31,8 @@ public class EvaluationExecuter
 
 	private final ClassPathXmlApplicationContext context;
 
+	private ListMultimap<String, Long> results;
+
 	/**
 	 * 
 	 * @param specificEvaluator2
@@ -41,6 +45,23 @@ public class EvaluationExecuter
 
 		loadBeans();
 		loadQueries();
+	}
+
+	/**
+	 * @throws InterruptedException
+	 * 
+	 */
+	public void execute( final Evaluator evaluator ) throws InterruptedException
+	{
+		this.results = evaluator.execute();
+	}
+
+	/**
+	 * 
+	 */
+	public void writeResults()
+	{
+		StatisticsHelper.writeResults( this.results, this.properties );
 	}
 
 	/**
@@ -63,7 +84,8 @@ public class EvaluationExecuter
 
 		try
 		{
-			specificEvaluator.execute();
+			executer.execute( specificEvaluator );
+			executer.writeResults();
 		}
 		catch ( InterruptedException e )
 		{
@@ -84,7 +106,7 @@ public class EvaluationExecuter
 	{
 		if ( args == null || args.length == 0 )
 		{
-			log.info( "No explicite datasource given. Using mysql evaluator" );
+			log.info( "No explicite evaluator given. Please specify as first argument one of {'mysql', 'neo4j', 'sesame'}" );
 			System.exit( 1 );
 		}
 

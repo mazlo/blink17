@@ -8,10 +8,27 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Collection;
 
+import org.apache.commons.lang3.StringUtils;
+import org.gesis.zl.evaluation.service.EvaluationProperties;
+
 import com.google.common.collect.Multimap;
 
+/**
+ * 
+ * @author matthaeus
+ * 
+ */
 public class StatisticsHelper
 {
+
+	/**
+	 * 
+	 * @param results
+	 */
+	public static void writeResults( final Multimap<String, Long> results, final EvaluationProperties properties )
+	{
+		writeResults( getStatisticsFilename( properties ), results );
+	}
 
 	/**
 	 * @param results
@@ -40,6 +57,15 @@ public class StatisticsHelper
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * @return
+	 */
+	public static String getStatisticsFilename( final EvaluationProperties properties )
+	{
+		String[] str = new String[] { properties.getEvaluator(), properties.getStatisticsOutputFilename(), String.valueOf( properties.getQueriesTotal() ), String.valueOf( properties.getThreadPoolSize() ), String.valueOf( System.currentTimeMillis() ) };
+		return StringUtils.join( str, "_" );
 	}
 
 }
