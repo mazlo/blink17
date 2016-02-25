@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.google.common.collect.ListMultimap;
+import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 
 /**
@@ -31,7 +31,7 @@ public class EvaluationExecuter
 
 	private final ClassPathXmlApplicationContext context;
 
-	private ListMultimap<String, Long> results;
+	private Multimap<String, Long> results;
 
 	/**
 	 * 
