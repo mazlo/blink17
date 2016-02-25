@@ -21,6 +21,6 @@
 
 	<context:component-scan base-package="org.gesis.zl.evaluation" />
 
-	<util:properties id="applicationProperties" location="classpath:application.properties" />
+	<context:property-placeholder location="classpath:application.properties" />
 	
 </beans>
