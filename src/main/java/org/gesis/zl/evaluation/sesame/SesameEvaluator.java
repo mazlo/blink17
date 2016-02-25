@@ -16,6 +16,7 @@ import org.openrdf.repository.http.HTTPRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
@@ -83,7 +84,7 @@ public class SesameEvaluator implements Evaluator
 
 		// collect results
 		log.info( "collect results" );
-		Multimap<String, Long> results = HashMultimap.create();
+		Multimap<String, Long> results = ArrayListMultimap.create();
 
 		for ( int i = 0; i < totalExecutions; i++ )
 		{
