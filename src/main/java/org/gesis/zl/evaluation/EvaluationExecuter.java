@@ -25,7 +25,7 @@ public class EvaluationExecuter
 
 	private static Logger log = LoggerFactory.getLogger( EvaluationExecuter.class );
 
-	private final Evaluator evaluator;
+	private Evaluator evaluator;
 	private EvaluationProperties properties;
 	private QueryShuffleService queryShuffleService;
 
@@ -35,15 +35,38 @@ public class EvaluationExecuter
 
 	/**
 	 * 
-	 * @param specificEvaluator2
+	 * @param args
+	 */
+	public static void main( final String[] args )
+	{
+		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext( "classpath:context.xml" );
+
+		EvaluationExecuter executer = new EvaluationExecuter( context );
+
+		try
+		{
+			executer.runEvaluation();
+			executer.writeResults();
+		}
+		catch ( InterruptedException e )
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		context.close();
+	}
+
+	/**
+	 * 
 	 * @param context
 	 */
-	public EvaluationExecuter( final Evaluator specificEvaluator, final ClassPathXmlApplicationContext context )
+	public EvaluationExecuter( final ClassPathXmlApplicationContext context )
 	{
-		this.evaluator = specificEvaluator;
 		this.context = context;
 
 		loadBeans();
+		loadEvaluator();
 		loadQueries();
 	}
 
@@ -51,9 +74,9 @@ public class EvaluationExecuter
 	 * @throws InterruptedException
 	 * 
 	 */
-	public void execute( final Evaluator evaluator ) throws InterruptedException
+	public void runEvaluation() throws InterruptedException
 	{
-		this.results = evaluator.execute();
+		this.results = this.evaluator.execute();
 	}
 
 	/**
@@ -67,50 +90,11 @@ public class EvaluationExecuter
 	/**
 	 * 
 	 * @param args
-	 */
-	public static void main( final String[] args )
-	{
-		Evaluator specificEvaluator = loadEvaluator( args );
-
-		if ( specificEvaluator == null )
-		{
-			log.error( "Evaluator is null, cannot proceed." );
-			System.exit( 2 );
-		}
-
-		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext( "classpath:context.xml" );
-
-		EvaluationExecuter executer = new EvaluationExecuter( specificEvaluator, context );
-
-		try
-		{
-			executer.execute( specificEvaluator );
-			executer.writeResults();
-		}
-		catch ( InterruptedException e )
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		context.close();
-
-	}
-
-	/**
-	 * 
-	 * @param args
 	 * @return
 	 */
-	private static Evaluator loadEvaluator( final String[] args )
+	private void loadEvaluator()
 	{
-		if ( args == null || args.length == 0 )
-		{
-			log.info( "No explicite evaluator given. Please specify as first argument one of {'mysql', 'neo4j', 'sesame'}" );
-			System.exit( 1 );
-		}
-
-		String evaluator = args[0];
+		String evaluator = this.properties.getEvaluator();
 
 		if ( !Sets.newHashSet( new String[] { "mysql", "sesame", "neo4j" } ).contains( evaluator ) )
 		{
@@ -118,14 +102,13 @@ public class EvaluationExecuter
 			System.exit( 1 );
 		}
 
-		Evaluator evaluatorInstance = null;
-
 		try
 		{
 			@SuppressWarnings( "unchecked" )
 			Class<Evaluator> evaluatorClass = (Class<Evaluator>) Class.forName( "org.gesis.zl.evaluation." + evaluator + "." + WordUtils.capitalize( evaluator ) + "Evaluator" );
 
-			evaluatorInstance = evaluatorClass.newInstance();
+			this.evaluator = evaluatorClass.newInstance();
+			this.evaluator.setEvaluationProperties( this.properties );
 		}
 		catch ( ClassNotFoundException e )
 		{
@@ -139,22 +122,18 @@ public class EvaluationExecuter
 		{
 			e.printStackTrace();
 		}
-
-		return evaluatorInstance;
 	}
 
 	/**
 	 * 
 	 */
-	public void loadBeans()
+	private void loadBeans()
 	{
 		// set properties
-		EvaluationProperties properties = this.context.getBean( EvaluationProperties.class );
-		this.properties = properties;
-		this.evaluator.setEvaluationProperties( properties );
+		this.properties = this.context.getBean( EvaluationProperties.class );
 
 		// set query shuffle service
-		String queryDistribution = properties.getQueriesDistribution();
+		String queryDistribution = this.properties.getQueriesDistribution();
 
 		if ( StringUtils.isEmpty( queryDistribution ) )
 		{ // default is equal distribution
@@ -170,7 +149,7 @@ public class EvaluationExecuter
 	/**
 	 * 
 	 */
-	public void loadQueries()
+	private void loadQueries()
 	{
 		String expectedDistributionFilepath = "queries/" + this.properties.getQueriesDistribution() + ".txt";
 
