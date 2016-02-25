@@ -10,46 +10,46 @@ import org.springframework.stereotype.Service;
 @Service
 public class EvaluationProperties
 {
-	@Value( "#{applicationProperties['evaluate']}" )
+	@Value( "${evaluate}" )
 	private String evaluator;
 
-	@Value( "#{applicationProperties['server.db.driverClass']}" )
+	@Value( "${server.db.driverClass}" )
 	private String dbDriverClass;
 
-	@Value( "#{applicationProperties['server.db.url']}" )
+	@Value( "${server.db.url}" )
 	private String dbUrl;
 
-	@Value( "#{applicationProperties['server.db.name']}" )
+	@Value( "${server.db.name}" )
 	private String dbName;
 
-	@Value( "#{applicationProperties['server.db.username']}" )
+	@Value( "${server.db.username}" )
 	private String dbUsername;
 
-	@Value( "#{applicationProperties['server.db.password']}" )
+	@Value( "${server.db.password}" )
 	private String dbPassword;
 
-	@Value( "#{applicationProperties['statistics.output.filename']}" )
+	@Value( "${statistics.output.filename}" )
 	private String statisticsOutputFilename;
 
-	@Value( "#{applicationProperties['queries.folder']}" )
+	@Value( "${queries.folder}" )
 	private String queriesFolder;
 
-	@Value( "#{applicationProperties['queries.filetype']}" )
+	@Value( "${queries.filetype}" )
 	private String queriesFiletype;
 
-	@Value( "#{applicationProperties['queries.total']}" )
+	@Value( "${queries.total}" )
 	private int queriesTotal;
 
-	@Value( "#{applicationProperties['queries.probabilities']}" )
+	@Value( "${queries.probabilities}" )
 	private String[] queriesProbabilities;
 
-	@Value( "#{applicationProperties['queries.available']}" )
+	@Value( "${queries.available}" )
 	private String[] queriesAvailable;
 
-	@Value( "#{applicationProperties['queries.distribution']}" )
+	@Value( "${queries.distribution}" )
 	private String queriesDistribution;
 
-	@Value( "#{applicationProperties['thread.pool.size']}" )
+	@Value( "${thread.pool.size}" )
 	private int threadPoolSize;
 
 	/* getter / setter */

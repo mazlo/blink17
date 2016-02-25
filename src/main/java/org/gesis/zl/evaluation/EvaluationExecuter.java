@@ -123,7 +123,7 @@ public class EvaluationExecuter
 		try
 		{
 			@SuppressWarnings( "unchecked" )
-			Class<Evaluator> evaluatorClass = (Class<Evaluator>) Class.forName( WordUtils.capitalize( evaluator ) + "Evaluator" );
+			Class<Evaluator> evaluatorClass = (Class<Evaluator>) Class.forName( "org.gesis.zl.evaluation." + evaluator + "." + WordUtils.capitalize( evaluator ) + "Evaluator" );
 
 			evaluatorInstance = evaluatorClass.newInstance();
 		}
@@ -150,6 +150,7 @@ public class EvaluationExecuter
 	{
 		// set properties
 		EvaluationProperties properties = this.context.getBean( EvaluationProperties.class );
+		this.properties = properties;
 		this.evaluator.setEvaluationProperties( properties );
 
 		// set query shuffle service
