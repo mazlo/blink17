@@ -38,7 +38,7 @@ public class EvaluationProperties
 	private String queriesFiletype;
 
 	@Value( "${queries.total}" )
-	private int queriesTotal;
+	private String queriesTotal;
 
 	@Value( "${queries.probabilities}" )
 	private String[] queriesProbabilities;
@@ -50,7 +50,7 @@ public class EvaluationProperties
 	private String queriesDistribution;
 
 	@Value( "${thread.pool.size}" )
-	private int threadPoolSize;
+	private String threadPoolSize;
 
 	/* getter / setter */
 
@@ -96,12 +96,12 @@ public class EvaluationProperties
 
 	public int getThreadPoolSize()
 	{
-		return this.threadPoolSize;
+		return Integer.parseInt( this.threadPoolSize );
 	}
 
 	public int getQueriesTotal()
 	{
-		return this.queriesTotal;
+		return Integer.parseInt( this.queriesTotal );
 	}
 
 	public String getQueriesFiletype()
