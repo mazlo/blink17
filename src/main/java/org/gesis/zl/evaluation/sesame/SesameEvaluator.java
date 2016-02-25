@@ -8,10 +8,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import org.apache.commons.lang3.StringUtils;
 import org.gesis.zl.evaluation.Evaluator;
 import org.gesis.zl.evaluation.service.EvaluationProperties;
-import org.gesis.zl.evaluation.statistics.StatisticsHelper;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryException;
 import org.openrdf.repository.http.HTTPRepository;
@@ -19,7 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.HashMultimap;
-import com.google.common.collect.SetMultimap;
+import com.google.common.collect.Multimap;
 
 /**
  * @author matthaeus
@@ -32,14 +30,12 @@ public class SesameEvaluator implements Evaluator
 	private EvaluationProperties properties;
 	private String[][] queriesToExecute;
 
-	private final SetMultimap<String, Long> results = HashMultimap.create();
-
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see org.gesis.zl.evaluation.Evaluator#execute()
 	 */
-	public void execute() throws InterruptedException
+	public Multimap<String, Long> execute() throws InterruptedException
 	{
 		log.info( "Executing ... " );
 
@@ -54,7 +50,7 @@ public class SesameEvaluator implements Evaluator
 			log.error( "Error initializing repository. Exception as follows:" );
 			log.error( e1.getMessage() );
 
-			return;
+			return HashMultimap.create();
 		}
 
 		// prepare threads
@@ -87,6 +83,8 @@ public class SesameEvaluator implements Evaluator
 
 		// collect results
 		log.info( "collect results" );
+		Multimap<String, Long> results = HashMultimap.create();
+
 		for ( int i = 0; i < totalExecutions; i++ )
 		{
 			Future<Long> executedTask = listOfWorkers.get( i );
@@ -94,7 +92,7 @@ public class SesameEvaluator implements Evaluator
 			try
 			{
 				ms = executedTask.get();
-				this.results.put( this.queriesToExecute[i][0], ms );
+				results.put( this.queriesToExecute[i][0], ms );
 			}
 			catch ( ExecutionException e )
 			{
@@ -103,18 +101,9 @@ public class SesameEvaluator implements Evaluator
 			}
 		}
 
-		StatisticsHelper.writeResults( getStatisticsFilename(), this.results );
-
 		log.info( "Finished" );
-	}
 
-	/**
-	 * @return
-	 */
-	private String getStatisticsFilename()
-	{
-		String[] str = new String[] { this.properties.getStatisticsOutputFilename(), String.valueOf( this.properties.getQueriesTotal() ), String.valueOf( this.properties.getThreadPoolSize() ), String.valueOf( System.currentTimeMillis() ) };
-		return StringUtils.join( str, "_" );
+		return results;
 	}
 
 	public void setEvaluationProperties( final EvaluationProperties properties )

@@ -8,15 +8,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import org.apache.commons.lang3.StringUtils;
 import org.gesis.zl.evaluation.Evaluator;
 import org.gesis.zl.evaluation.service.EvaluationProperties;
-import org.gesis.zl.evaluation.statistics.StatisticsHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.HashMultimap;
-import com.google.common.collect.SetMultimap;
+import com.google.common.collect.Multimap;
 
 /**
  * @author matthaeus
@@ -29,13 +27,11 @@ public class Neo4jEvaluator implements Evaluator
 	private EvaluationProperties properties;
 	private String[][] queriesToExecute;
 
-	private final SetMultimap<String, Long> results = HashMultimap.create();
-
 	/**
 	 * @throws InterruptedException
 	 * 
 	 */
-	public void execute() throws InterruptedException
+	public Multimap<String, Long> execute() throws InterruptedException
 	{
 		// prepare threads
 		ExecutorService executor = Executors.newFixedThreadPool( this.properties.getThreadPoolSize() );
@@ -67,6 +63,8 @@ public class Neo4jEvaluator implements Evaluator
 
 		// collect results
 		log.info( "collect results" );
+		Multimap<String, Long> results = HashMultimap.create();
+
 		for ( int i = 0; i < totalExecutions; i++ )
 		{
 			Future<Long> executedTask = listOfWorkers.get( i );
@@ -74,7 +72,7 @@ public class Neo4jEvaluator implements Evaluator
 			try
 			{
 				ms = executedTask.get();
-				this.results.put( this.queriesToExecute[i][0], ms );
+				results.put( this.queriesToExecute[i][0], ms );
 			}
 			catch ( ExecutionException e )
 			{
@@ -88,18 +86,9 @@ public class Neo4jEvaluator implements Evaluator
 			log.warn( "No executions (threads) due to empty query list" );
 		}
 
-		StatisticsHelper.writeResults( getStatisticsFilename(), this.results );
-
 		log.info( "Finished" );
-	}
 
-	/**
-	 * @return
-	 */
-	private String getStatisticsFilename()
-	{
-		String[] str = new String[] { this.properties.getStatisticsOutputFilename(), String.valueOf( this.properties.getQueriesTotal() ), String.valueOf( this.properties.getThreadPoolSize() ), String.valueOf( System.currentTimeMillis() ) };
-		return StringUtils.join( str, "_" );
+		return results;
 	}
 
 	public void setEvaluationProperties( final EvaluationProperties properties )
