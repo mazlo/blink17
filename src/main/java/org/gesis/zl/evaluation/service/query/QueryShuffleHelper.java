@@ -229,7 +229,7 @@ public class QueryShuffleHelper
 
 			for ( String[] query : shuffledQueries )
 			{
-				writer.write( query[0] + "\n" );
+				writer.write( query[0].substring( 0, query[0].indexOf( "." ) ) + "\n" );
 			}
 
 			writer.flush();
