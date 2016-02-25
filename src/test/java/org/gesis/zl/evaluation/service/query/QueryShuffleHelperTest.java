@@ -8,12 +8,23 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.util.Collections;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import com.google.common.collect.Lists;
 
 public class QueryShuffleHelperTest
 {
+
+	private boolean fileExists;
+
+	@Before
+	public void init()
+	{
+		File distributionFile = new File( "queries/equalDistribution.txt" );
+
+		distributionFile.exists();
+	}
 
 	@Test
 	public void readFromFile_fails()
@@ -28,7 +39,11 @@ public class QueryShuffleHelperTest
 	{
 		String[][] filenamesList = QueryShuffleHelper.readFromFile( "queries-mysql", new File( "queries/equalDistribution.txt" ), ".sql" );
 		assertNotNull( filenamesList );
-		assertTrue( filenamesList.length == 4 );
+
+		if ( this.fileExists )
+		{
+			assertTrue( filenamesList.length == 4 );
+		}
 	}
 
 	@Test
