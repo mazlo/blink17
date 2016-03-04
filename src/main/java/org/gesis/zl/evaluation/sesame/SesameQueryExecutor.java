@@ -21,10 +21,10 @@ public class SesameQueryExecutor implements Callable<Long>
 
 	private RepositoryConnection conn;
 
-	private String queryKey;
-	private String query;
+	private final String queryKey;
+	private final String query;
 
-	public SesameQueryExecutor( Repository repo, String[] query )
+	public SesameQueryExecutor( final Repository repo, final String[] query )
 	{
 		this.queryKey = query[0];
 		this.query = query[1];
@@ -40,22 +40,23 @@ public class SesameQueryExecutor implements Callable<Long>
 		}
 	}
 
+	@Override
 	public Long call() throws Exception
 	{
 		TupleQuery tupleQuery;
 
 		// prepare
-		tupleQuery = conn.prepareTupleQuery( QueryLanguage.SPARQL, this.query );
+		tupleQuery = this.conn.prepareTupleQuery( QueryLanguage.SPARQL, this.query );
 
 		// execute
 		log.info( "about to execute query {}..", this.queryKey );
 		long start = System.currentTimeMillis();
+
 		TupleQueryResult queryResult = tupleQuery.evaluate();
 
-		// evaluate
-		queryResult.close();
-
 		long resultMs = System.currentTimeMillis() - start;
+
+		queryResult.close();
 
 		return resultMs;
 	}
