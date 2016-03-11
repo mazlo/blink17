@@ -43,9 +43,11 @@ public class QueryShuffleHelper
 			reader = new BufferedReader( new FileReader( fromFile ) );
 
 			String queryFilename = null;
+			int index = 0;
 			while ( StringUtils.isNotEmpty( queryFilename = reader.readLine() ) )
 			{
 				queryFilenamesList.add( queryFilename.concat( fileType ) );
+				log.debug( "bucket[{}] -> {}", index++, queryFilename );
 			}
 
 			reader.close();
@@ -89,7 +91,7 @@ public class QueryShuffleHelper
 
 		if ( availableQueries == null || availableQueries.length == 0 )
 		{
-			log.debug( "Using all queries in folder" );
+			log.debug( "Using all queries in folder (property 'queries.available' not set)" );
 
 			// all files in folder
 			filenamesList = queryFolder.list();
@@ -98,11 +100,12 @@ public class QueryShuffleHelper
 		}
 		else
 		{
-			log.debug( "Filtering queries according to property" );
+			log.debug( "Filtering queries according to property (property 'queries.avaibable' = {})", availableQueries.length );
 
 			// filter files in folder
 			filenamesList = queryFolder.list( new FilenameFilter()
 			{
+				@Override
 				public boolean accept( final File file, final String filename )
 				{
 					for ( String filenameAvailable : availableQueries )
@@ -155,6 +158,7 @@ public class QueryShuffleHelper
 			for ( int j = 0; j < initialQueries.length && index < totalNoOfQueries; j++ )
 			{
 				multipliedQueries[index++] = initialQueries[j];
+				log.debug( "bucket[{}] -> {}", index, initialQueries[j] );
 			}
 		}
 
