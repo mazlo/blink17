@@ -120,4 +120,15 @@ public class ProbabilityDistributionQueryShuffleService implements QueryShuffleS
 		this.properties = properties;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.gesis.zl.evaluation.service.query.QueryShuffleService#getName()
+	 */
+	@Override
+	public String getName()
+	{
+		return "Probability Distribution Shuffle Service";
+	}
+
 }
