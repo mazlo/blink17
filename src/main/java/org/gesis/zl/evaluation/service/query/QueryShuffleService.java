@@ -25,4 +25,11 @@ public interface QueryShuffleService
 	 */
 	public void setProperties( final EvaluationProperties properties );
 
+	/**
+	 * Returns the name of this shuffle service instance.
+	 * 
+	 * @return
+	 */
+	public String getName();
+
 }

@@ -96,9 +96,9 @@ public class EvaluationExecuter
 	{
 		String evaluator = this.properties.getEvaluator();
 
-		if ( !Sets.newHashSet( new String[] { "mysql", "sesame", "neo4j" } ).contains( evaluator ) )
+		if ( !Sets.newHashSet( new String[] { "mysql", "sesame", "neo4j", "stardog" } ).contains( evaluator ) )
 		{
-			log.error( "Unknown evaluator given: '{}'. Please change to one of {'mysql', 'neo4j', 'sesame'}", evaluator );
+			log.error( "Unknown evaluator given: '{}'. Please change to one of {'mysql', 'neo4j', 'sesame', 'stardog'}", evaluator );
 			System.exit( 1 );
 		}
 
@@ -109,6 +109,8 @@ public class EvaluationExecuter
 
 			this.evaluator = evaluatorClass.newInstance();
 			this.evaluator.setEvaluationProperties( this.properties );
+
+			log.info( "{} instantiated successfully", this.evaluator.getClass().getName() );
 		}
 		catch ( ClassNotFoundException e )
 		{
@@ -138,10 +140,12 @@ public class EvaluationExecuter
 		if ( StringUtils.isEmpty( queryDistribution ) )
 		{ // default is equal distribution
 			this.queryShuffleService = this.context.getBean( "equalDistribution", QueryShuffleService.class );
+			log.warn( "Using default shuffle service '{}', because no explicite distribution given in property 'queries.distributions'", this.queryShuffleService.getName() );
 		}
 		else
 		{ //
 			this.queryShuffleService = this.context.getBean( queryDistribution, QueryShuffleService.class );
+			log.info( "Using shuffle service '{}'", this.queryShuffleService.getName() );
 		}
 
 	}

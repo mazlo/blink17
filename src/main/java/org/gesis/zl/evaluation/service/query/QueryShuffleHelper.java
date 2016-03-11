@@ -172,8 +172,6 @@ public class QueryShuffleHelper
 	 */
 	public static String[][] mapQueryNameToQuery( final String inFolder, final String[] filenamesList )
 	{
-		log.info( "Mapping actual queries to query names" );
-
 		String[][] queries = new String[filenamesList.length][2];
 
 		for ( int i = 0; i < filenamesList.length; i++ )
@@ -201,6 +199,8 @@ public class QueryShuffleHelper
 				e.printStackTrace();
 			}
 		}
+
+		log.info( "Successfully mapped actual queries to query filenames" );
 
 		return queries;
 	}

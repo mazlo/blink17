@@ -27,6 +27,7 @@ public class EqualDistributionQueryShuffleService implements QueryShuffleService
 	 * 
 	 * @see org.gesis.zl.evaluation.service.query.QueryShuffleService#shuffle()
 	 */
+	@Override
 	public String[][] shuffle( final String[] queryFilenamesList, final int totalNumberOfQueries )
 	{
 		if ( queryFilenamesList == null || queryFilenamesList.length == 0 )
@@ -51,9 +52,21 @@ public class EqualDistributionQueryShuffleService implements QueryShuffleService
 	 * org.gesis.zl.evaluation.service.query.QueryShuffleService#setProperties
 	 * (java.util.Properties)
 	 */
+	@Override
 	public void setProperties( final EvaluationProperties properties )
 	{
 		this.properties = properties;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.gesis.zl.evaluation.service.query.QueryShuffleService#getName()
+	 */
+	@Override
+	public String getName()
+	{
+		return "Equal Distribution Shuffle Service";
 	}
 
 }
