@@ -1,6 +1,8 @@
 package org.gesis.zl.evaluation.statistics;
 
 import static ch.lambdaj.Lambda.avg;
+import static ch.lambdaj.Lambda.maxFrom;
+import static ch.lambdaj.Lambda.minFrom;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -39,14 +41,16 @@ public class StatisticsHelper
 		{
 			BufferedWriter statsFile = new BufferedWriter( new FileWriter( new File( toFile ) ) );
 
-			statsFile.write( "query_name;time_in_ms" );
+			statsFile.write( "query_name;avg_time;max_time;min_time;total_no" );
 			statsFile.newLine();
 
 			for ( String key : results.keySet() )
 			{
 				Collection<Long> set = results.get( key );
-				Number sum = avg( set );
-				statsFile.write( key + ";" + sum + ";" + set.size() );
+				Number avg = avg( set );
+				Number max = maxFrom( set );
+				Number min = minFrom( set );
+				statsFile.write( key + ";" + avg + ";" + max + ";" + min + ";" + set.size() );
 				statsFile.newLine();
 			}
 
