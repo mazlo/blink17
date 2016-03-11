@@ -25,6 +25,7 @@ public class ProbabilityDistributionQueryShuffleService implements QueryShuffleS
 	 * @see
 	 * org.gesis.zl.evaluation.service.query.QueryShuffleService#shuffle(int)
 	 */
+	@Override
 	public String[][] shuffle( final String[] queryFilenamesList, final int totalNumberOfQueries )
 	{
 		log.info( "Shuffling queries" );
@@ -61,6 +62,8 @@ public class ProbabilityDistributionQueryShuffleService implements QueryShuffleS
 
 		String[] totalQueriesFileList = new String[totalNumberOfQueries];
 
+		// the probability algorithm
+
 		int index = 0;
 		while ( index < totalNumberOfQueries )
 		{
@@ -69,6 +72,8 @@ public class ProbabilityDistributionQueryShuffleService implements QueryShuffleS
 
 			for ( int i = 0; i < probabilityValues.length; i++ )
 			{
+				// cumulate until the value is bigger than the randomly chosen p
+				// value. this works, because the value of p is equally distributed
 				cumulativeProbability += Double.valueOf( probabilityValues[i] );
 
 				if ( p <= cumulativeProbability )
@@ -109,6 +114,7 @@ public class ProbabilityDistributionQueryShuffleService implements QueryShuffleS
 	 * org.gesis.zl.evaluation.service.query.QueryShuffleService#setProperties
 	 * (java.util.Properties)
 	 */
+	@Override
 	public void setProperties( final EvaluationProperties properties )
 	{
 		this.properties = properties;
