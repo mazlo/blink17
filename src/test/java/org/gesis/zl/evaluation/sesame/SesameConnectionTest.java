@@ -2,6 +2,7 @@ package org.gesis.zl.evaluation.sesame;
 
 import org.gesis.zl.evaluation.service.EvaluationProperties;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openrdf.query.MalformedQueryException;
@@ -26,6 +27,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  */
 @RunWith( SpringJUnit4ClassRunner.class )
 @ContextConfiguration( locations = { "classpath:context.xml" } )
+@Ignore
 public class SesameConnectionTest
 {
 	private final static Logger log = LoggerFactory.getLogger( SesameConnectionTest.class );
