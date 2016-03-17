@@ -49,13 +49,13 @@ public class QueryShuffleHelperTest
 	@Test
 	public void multiplyNumberOfQueries()
 	{
-		String[] multipliedQueries = QueryShuffleHelper.multiplyNumberOfQueries( new String[] { "dp1.sql", "dp2.sql", "dp3.sql", "dp4.sql" }, 20 );
+		String[] multipliedQueries = QueryShuffleHelper.multiplyNumberOfQueries( new String[] { "dp1.sql", "dp2.sql", "dp3.sql", "dp4.sql" }, 25 );
 		assertNotNull( multipliedQueries );
-		assertThat( multipliedQueries.length, equalTo( 20 ) );
+		assertThat( multipliedQueries.length, equalTo( 100 ) );
 		
-		assertThat( Collections.frequency( Lists.newArrayList( multipliedQueries ), "dp1.sql" ), equalTo( 5 ) );
-		assertThat( Collections.frequency( Lists.newArrayList( multipliedQueries ), "dp2.sql" ), equalTo( 5 ) );
-		assertThat( Collections.frequency( Lists.newArrayList( multipliedQueries ), "dp3.sql" ), equalTo( 5 ) );
-		assertThat( Collections.frequency( Lists.newArrayList( multipliedQueries ), "dp4.sql" ), equalTo( 5 ) );
+		assertThat( Collections.frequency( Lists.newArrayList( multipliedQueries ), "dp1.sql" ), equalTo( 25 ) );
+		assertThat( Collections.frequency( Lists.newArrayList( multipliedQueries ), "dp2.sql" ), equalTo( 25 ) );
+		assertThat( Collections.frequency( Lists.newArrayList( multipliedQueries ), "dp3.sql" ), equalTo( 25 ) );
+		assertThat( Collections.frequency( Lists.newArrayList( multipliedQueries ), "dp4.sql" ), equalTo( 25 ) );
 	}
 }

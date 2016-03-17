@@ -37,6 +37,9 @@ public class EvaluationProperties
 	@Value( "${queries.filetype}" )
 	private String queriesFiletype;
 
+	@Value( "${queries.multiplier}" )
+	private String queriesMultiplier;
+
 	@Value( "${queries.total}" )
 	private String queriesTotal;
 
@@ -102,6 +105,11 @@ public class EvaluationProperties
 	public int getQueriesTotal()
 	{
 		return Integer.parseInt( this.queriesTotal );
+	}
+
+	public int getQueriesMultiplier()
+	{
+		return Integer.parseInt( this.queriesMultiplier );
 	}
 
 	public String getQueriesFiletype()

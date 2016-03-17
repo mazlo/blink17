@@ -139,25 +139,26 @@ public class QueryShuffleHelper
 	 * @param availableQueries
 	 * @return
 	 */
-	public static String[] multiplyNumberOfQueries( final String[] initialQueries, final int totalNoOfQueries )
+	public static String[] multiplyNumberOfQueries( final String[] initialQueries, final int multiplier )
 	{
 		log.info( "Multiplying queries" );
 
-		if ( totalNoOfQueries <= 1 )
+		if ( multiplier <= 1 )
 		{
 			return initialQueries;
 		}
 
+		int totalNoOfQueries = initialQueries.length * multiplier;
 		log.info( "initial {} -> total {}", initialQueries.length, totalNoOfQueries );
 
 		String[] multipliedQueries = new String[totalNoOfQueries];
 
 		int index = 0;
-		for ( int i = 0; i < totalNoOfQueries; i++ )
+		for ( int i = 0; i < multiplier; i++ )
 		{
-			for ( int j = 0; j < initialQueries.length && index < totalNoOfQueries; j++ )
+			for ( int j = 0; j < initialQueries.length; j++, index++ )
 			{
-				multipliedQueries[index++] = initialQueries[j];
+				multipliedQueries[index] = initialQueries[j];
 				log.debug( "bucket[{}] -> {}", index, initialQueries[j] );
 			}
 		}

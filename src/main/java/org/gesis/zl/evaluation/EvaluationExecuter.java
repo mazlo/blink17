@@ -175,7 +175,7 @@ public class EvaluationExecuter
 			String[] queries = QueryShuffleHelper.readFromProperties( this.properties.getQueriesFolder(), this.properties.getQueriesFiletype(), this.properties.getQueriesAvailable() );
 
 			// create distribution with the specified properties
-			queriesToExecute = this.queryShuffleService.shuffle( queries, this.properties.getQueriesTotal() );
+			queriesToExecute = this.queryShuffleService.shuffle( queries, this.properties.getQueriesMultiplier() );
 
 			// save for later usage
 			QueryShuffleHelper.writeToFile( queriesToExecute, expectedDistributionFilepath );
