@@ -96,9 +96,9 @@ public class EvaluationExecuter
 	{
 		String evaluator = this.properties.getEvaluator();
 
-		if ( !Sets.newHashSet( new String[] { "mysql", "sesame", "neo4j", "stardog" } ).contains( evaluator ) )
+		if ( !Sets.newHashSet( new String[] { "mysql", "sesame", "neo4j", "stardog", "virtuoso" } ).contains( evaluator ) )
 		{
-			log.error( "Unknown evaluator given: '{}'. Please change to one of {'mysql', 'neo4j', 'sesame', 'stardog'}", evaluator );
+			log.error( "Unknown evaluator given: '{}'. Please change to one of {'mysql', 'neo4j', 'sesame', 'stardog', 'virtuoso'}", evaluator );
 			System.exit( 1 );
 		}
 
