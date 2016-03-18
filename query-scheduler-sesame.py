@@ -23,7 +23,7 @@ for tps in ["1","5","10","15","20"]:
   os.system( "curl http://localhost:8080/openrdf-workbench/repositories/in-memory-store/query?action=exec\&queryLn=SPARQL\&query=SELECT%28COUNT%28%3Fz%29AS%3Fc%29WHERE{%3Fx%20%3Fy%20%3Fz}LIMIT10" );
   time.sleep(10);
   print "setting up thread pool to "+ tps;
-  os.system( "sed -i 's/thread.pool.size=.*/thread.pool.size="+ tps +"/' application.properties ");
+  os.system( "sudo -u matthaeus -H sed -i 's/thread.pool.size=.*/thread.pool.size="+ tps +"/' application.properties ");
   print "about to start evaluation..";
   time.sleep(5);
   os.system( "java -jar disco-evaluation-0.0.1-SNAPSHOT.jar" );
