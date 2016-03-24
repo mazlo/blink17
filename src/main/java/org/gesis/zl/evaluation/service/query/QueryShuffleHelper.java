@@ -191,8 +191,9 @@ public class QueryShuffleHelper
 			}
 			catch ( FileNotFoundException e )
 			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.warn( "Query '{}' not found. There will be no statistics for this query.", queryFilename );
+
+				queries[i][1] = "";
 			}
 			catch ( IOException e )
 			{
