@@ -1,19 +1,24 @@
 # Prerequisites
 
-Make sure you stop all processes that are not relevant for the system to run, e.g.
+Stop all processes that are not relevant for the system to run, e.g.
 
 - Dropbox (`kill pid`) or Browsers
 - tracker (`tracker-control -t`)
 - mysql (`sudo service mysqld stop`), postgresql (`pgctl main stop`)
 
-# Prepare Evaluation
+Make sure the system that you want to evaluate is running.
 
-- Make sure the system that you want to evaluate is running.
-- cd to the root of the project.
+```bash
+cd disco-evaluation
+```
 
 ## System Configuration
 
-Edit the `application.properties` file to match your configuration.
+Edit property-file to match your configuration.
+
+```bash
+vim application.properties
+```
 
 - The `evaluate`-property is a label for the system you are evaluating. It is also used in other properties. This is the property to change when you go from evaluating one system to evaluating another.
 
@@ -53,5 +58,10 @@ number of probability values has to be equal to the number of queries available.
 
 # Start Evaluation
 
-To start the evaluation just use the java command `java -jar disco-evaluation.jar`. Results are written into the file specified 
-in property `statistics.output.filename`.
+To start the evaluation just use the following java command 
+
+```bash
+java -jar disco-evaluation.jar
+```
+
+Results are written into the file specified in property `statistics.output.filename`.
