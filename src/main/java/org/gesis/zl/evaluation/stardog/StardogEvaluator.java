@@ -3,17 +3,16 @@ package org.gesis.zl.evaluation.stardog;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import org.gesis.zl.evaluation.Evaluator;
 import org.gesis.zl.evaluation.service.EvaluationProperties;
+import org.gesis.zl.evaluation.statistics.StatisticsHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 
 /**
@@ -41,11 +40,15 @@ public class StardogEvaluator implements Evaluator
 		List<Future<Long>> listOfWorkers = new ArrayList<Future<Long>>();
 
 		int totalExecutions = this.queriesToExecute.length;
-		// int totalExecutions = 10;
 
 		// start so many threads a there are queries
 		for ( int i = 0; i < totalExecutions; i++ )
 		{
+			if ( this.queriesToExecute[i][1].length() == 0 )
+			{
+				continue;
+			}
+
 			Callable<Long> queryExecution = new StardogQueryExecutor( this.properties.getDbUrl() + this.properties.getDbName(), this.queriesToExecute[i] );
 
 			// execute
@@ -63,34 +66,7 @@ public class StardogEvaluator implements Evaluator
 			// wait to terminate
 		}
 
-		// collect results
-		log.info( "collect results" );
-		Multimap<String, Long> results = ArrayListMultimap.create();
-
-		for ( int i = 0; i < totalExecutions; i++ )
-		{
-			Future<Long> executedTask = listOfWorkers.get( i );
-			Long ms;
-			try
-			{
-				ms = executedTask.get();
-				results.put( this.queriesToExecute[i][0], ms );
-			}
-			catch ( ExecutionException e )
-			{
-				log.error( "Failed to get value from one Future (worker {})", i );
-				e.printStackTrace();
-			}
-		}
-
-		if ( totalExecutions == 0 )
-		{
-			log.warn( "No executions (threads) due to empty query list" );
-		}
-
-		log.info( "Finished" );
-
-		return results;
+		return StatisticsHelper.collectResults( listOfWorkers, this.queriesToExecute );
 	}
 
 	@Override
