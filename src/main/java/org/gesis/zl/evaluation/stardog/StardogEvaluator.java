@@ -78,7 +78,7 @@ public class StardogEvaluator implements Evaluator
 			}
 			catch ( ExecutionException e )
 			{
-				System.err.println( "Failed to get value from one Future" );
+				log.error( "Failed to get value from one Future (worker {})", i );
 				e.printStackTrace();
 			}
 		}
