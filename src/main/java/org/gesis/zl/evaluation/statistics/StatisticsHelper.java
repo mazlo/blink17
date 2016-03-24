@@ -1,8 +1,8 @@
 package org.gesis.zl.evaluation.statistics;
 
 import static ch.lambdaj.Lambda.avg;
-import static ch.lambdaj.Lambda.maxFrom;
-import static ch.lambdaj.Lambda.minFrom;
+import static ch.lambdaj.Lambda.max;
+import static ch.lambdaj.Lambda.min;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -48,8 +48,8 @@ public class StatisticsHelper
 			{
 				Collection<Long> set = results.get( key );
 				Number avg = avg( set );
-				Number max = maxFrom( set );
-				Number min = minFrom( set );
+				Number max = max( set );
+				Number min = min( set );
 				statsFile.write( key + ";" + avg + ";" + max + ";" + min + ";" + set.size() );
 				statsFile.newLine();
 			}
