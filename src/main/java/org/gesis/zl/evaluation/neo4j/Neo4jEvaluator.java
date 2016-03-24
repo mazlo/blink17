@@ -43,6 +43,11 @@ public class Neo4jEvaluator implements Evaluator
 		// start so many threads a there are queries
 		for ( int i = 0; i < totalExecutions; i++ )
 		{
+			if ( this.queriesToExecute[i][1].length() == 0 )
+			{
+				continue;
+			}
+
 			Callable<Long> queryExecution = new Neo4jQueryExecutor( this.properties.getDbUrl() + this.properties.getDbName(), this.queriesToExecute[i] );
 
 			// execute

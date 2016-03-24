@@ -44,6 +44,11 @@ public class FourStoreEvaluator implements Evaluator
 		// start so many threads a there are queries
 		for ( int i = 0; i < totalExecutions; i++ )
 		{
+			if ( this.queriesToExecute[i][1].length() == 0 )
+			{
+				continue;
+			}
+
 			Callable<Long> queryExecution = new FourStoreQueryExecutor( this.properties.getDbUrl() + this.properties.getDbName(), this.queriesToExecute[i] );
 
 			// execute
