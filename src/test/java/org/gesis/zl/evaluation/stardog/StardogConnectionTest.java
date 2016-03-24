@@ -1,6 +1,7 @@
 package org.gesis.zl.evaluation.stardog;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -49,9 +50,10 @@ public class StardogConnectionTest
 	{
 		HttpPost request = new HttpPost( this.properties.getDbUrl() + this.properties.getDbName() );
 
-		StringEntity params = new StringEntity( "{ \"query\" : \"" + this.query + "\" }" );
-		request.addHeader( "accept", "application/sparql-results+json" );
-		request.addHeader( "content-type", "application/json" );
+		// stardog needs url encoding of the query and NO accept http header
+		// when using POST as method
+		StringEntity params = new StringEntity( "query=" + URLEncoder.encode( this.query, "UTF-8" ) + "" );
+		request.addHeader( "content-type", "application/x-www-form-urlencoded" );
 		request.setEntity( params );
 
 		// execute
