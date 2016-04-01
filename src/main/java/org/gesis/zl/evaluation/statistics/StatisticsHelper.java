@@ -1,9 +1,5 @@
 package org.gesis.zl.evaluation.statistics;
 
-import static ch.lambdaj.Lambda.avg;
-import static ch.lambdaj.Lambda.max;
-import static ch.lambdaj.Lambda.min;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -13,6 +9,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.gesis.zl.evaluation.service.EvaluationProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,21 +69,23 @@ public class StatisticsHelper
 	{
 		// print summed up values
 		CsvWriter csvFile = new CsvWriter( new FileWriter( new File( toFile ) ), ';' );
+		
 
 		// print headers
-		String[] headers = new String[] { "query_name", "avg_time", "max_time", "min_time", "total_no" };
+		String[] headers = new String[] { "query_name", "max", "min", "mean", "stddev", "0.5p", "0.25p", "0.75p", "n" };
 		csvFile.writeRecord( headers );
 		csvFile.flush();
 
 		for ( String query : results.keySet() )
 		{
-			Collection<Long> set = results.get( query );
+			DescriptiveStatistics stats = new DescriptiveStatistics();
+			
+			for ( Long value : results.get( query ))
+			{
+				stats.addValue( value );
+			}
 
-			Number avg = avg( set );
-			Number max = max( set );
-			Number min = min( set );
-
-			csvFile.writeRecord( new String[] { query, avg.toString(), max.toString(), min.toString(), String.valueOf( set.size() ) } );
+			csvFile.writeRecord( new String[] { query, String.valueOf( stats.getMax() ), String.valueOf( stats.getMin() ), String.valueOf( stats.getMean() ), String.valueOf( stats.getStandardDeviation() ), String.valueOf( stats.getPercentile( 0.5d ) ), String.valueOf( stats.getPercentile( 0.25d ) ), String.valueOf( stats.getPercentile( 0.75d ) ), String.valueOf( stats.getN() ) } );
 			csvFile.flush();
 		}
 
@@ -130,9 +129,9 @@ public class StatisticsHelper
 
 		valuesToPrint[0] = firstValue;
 
-		for ( int i = 1; i < values.length; i++ )
+		for ( int i = 0; i < values.length; i++ )
 		{
-			valuesToPrint[i] = String.valueOf( values[i - 1] );
+			valuesToPrint[i + 1] = String.valueOf( values[i] );
 		}
 
 		return valuesToPrint;
