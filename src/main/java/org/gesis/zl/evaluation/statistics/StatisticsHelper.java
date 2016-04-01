@@ -68,7 +68,7 @@ public class StatisticsHelper
 	 * @param results
 	 * @throws IOException
 	 */
-	private static void printStatistics( String toFile, final Multimap<String, Long> results ) throws IOException
+	public static void printStatistics( String toFile, final Multimap<String, Long> results ) throws IOException
 	{
 		// print summed up values
 		CsvWriter csvFile = new CsvWriter( new FileWriter( new File( toFile ) ), ';' );
@@ -78,7 +78,7 @@ public class StatisticsHelper
 		csvFile.writeRecord( headers );
 		csvFile.flush();
 
-		for ( String query : headers )
+		for ( String query : results.keySet() )
 		{
 			Collection<Long> set = results.get( query );
 

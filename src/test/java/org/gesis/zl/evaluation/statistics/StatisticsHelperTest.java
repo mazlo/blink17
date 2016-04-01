@@ -32,4 +32,20 @@ public class StatisticsHelperTest
 
 		StatisticsHelper.printDetails( "target/results_test.csv", results );
 	}
+
+	@Test
+	public void printStatistics() throws IOException
+	{
+		Multimap<String, Long> results = ArrayListMultimap.create();
+
+		results.put( "q1", 30l );
+		results.put( "q1", 15l );
+		results.put( "q1", 40l );
+		results.put( "q1", 5l );
+		results.put( "q2", 30l );
+		results.put( "q2", 30l );
+		results.put( "q2", 20l );
+
+		StatisticsHelper.printStatistics( "target/statistics_test.csv", results );
+	}
 }
