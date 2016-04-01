@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
+import com.opencsv.CSVWriter;
 
 /**
  * 
@@ -36,16 +37,40 @@ public class StatisticsHelper
 	 */
 	public static void writeResults( final Multimap<String, Long> results, final EvaluationProperties properties )
 	{
-		writeResults( getStatisticsFilename( properties ), results );
+		writeResults( getStatisticsFilename( properties, false ), results, false );
+		writeResults( getStatisticsFilename( properties, true ), results, true );
 	}
 
 	/**
 	 * @param results
 	 */
-	public static void writeResults( final String toFile, final Multimap<String, Long> results )
+	public static void writeResults( final String toFile, final Multimap<String, Long> results, boolean details )
 	{
 		try
 		{
+			// print details
+			if ( details )
+			{
+				CSVWriter csvFile = new CSVWriter( new FileWriter( new File( toFile ) ), ';' );
+
+				// print headers
+				String[] headers = results.keySet().toArray( new String[] {} );
+				csvFile.writeNext( headers );
+				csvFile.flush();
+
+				for ( String query : headers )
+				{
+					Collection<Long> set = results.get( query );
+					csvFile.writeNext( set.toArray( new String[] {} ) );
+					csvFile.flush();
+				}
+
+				csvFile.close();
+
+				return;
+			}
+
+			// summed up values
 			BufferedWriter statsFile = new BufferedWriter( new FileWriter( new File( toFile ) ) );
 
 			statsFile.write( "query_name;avg_time;max_time;min_time;total_no" );
@@ -73,11 +98,12 @@ public class StatisticsHelper
 	}
 
 	/**
+	 * @param details
 	 * @return
 	 */
-	public static String getStatisticsFilename( final EvaluationProperties properties )
+	public static String getStatisticsFilename( final EvaluationProperties properties, boolean details )
 	{
-		String[] str = new String[] { properties.getStatisticsOutputFilename(), String.valueOf( properties.getQueriesTotal() ), String.valueOf( properties.getThreadPoolSize() ), String.valueOf( System.currentTimeMillis() ) };
+		String[] str = new String[] { properties.getStatisticsOutputFilename(), details ? "details" : "", String.valueOf( properties.getQueriesTotal() ), String.valueOf( properties.getThreadPoolSize() ), String.valueOf( System.currentTimeMillis() ) };
 		return StringUtils.join( str, "_" );
 	}
 
