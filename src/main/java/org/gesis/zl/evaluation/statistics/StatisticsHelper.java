@@ -17,9 +17,9 @@ import org.gesis.zl.evaluation.service.EvaluationProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.csvreader.CsvWriter;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-import com.opencsv.CSVWriter;
 
 /**
  * 
@@ -71,11 +71,11 @@ public class StatisticsHelper
 	private static void printStatistics( String toFile, final Multimap<String, Long> results ) throws IOException
 	{
 		// print summed up values
-		CSVWriter csvFile = new CSVWriter( new FileWriter( new File( toFile ) ), ';' );
+		CsvWriter csvFile = new CsvWriter( new FileWriter( new File( toFile ) ), ';' );
 
 		// print headers
 		String[] headers = new String[] { "query_name", "avg_time", "max_time", "min_time", "total_no" };
-		csvFile.writeNext( headers );
+		csvFile.writeRecord( headers );
 		csvFile.flush();
 
 		for ( String query : headers )
@@ -86,7 +86,7 @@ public class StatisticsHelper
 			Number max = max( set );
 			Number min = min( set );
 
-			csvFile.writeNext( new String[] { query, avg.toString(), max.toString(), min.toString(), String.valueOf( set.size() ) } );
+			csvFile.writeRecord( new String[] { query, avg.toString(), max.toString(), min.toString(), String.valueOf( set.size() ) } );
 			csvFile.flush();
 		}
 
@@ -101,7 +101,7 @@ public class StatisticsHelper
 	public static void printDetails( String toFile, final Multimap<String, Long> results ) throws IOException
 	{
 		// print details
-		CSVWriter csvFile = new CSVWriter( new FileWriter( new File( toFile ) ), ';' );
+		CsvWriter csvFile = new CsvWriter( new FileWriter( new File( toFile ) ), ';' );
 
 		for ( String query : results.keySet() )
 		{
@@ -109,7 +109,7 @@ public class StatisticsHelper
 
 			String[] valuesToPrint = getRowOfValues( query, set );
 
-			csvFile.writeNext( valuesToPrint );
+			csvFile.writeRecord( valuesToPrint );
 			csvFile.flush();
 		}
 
