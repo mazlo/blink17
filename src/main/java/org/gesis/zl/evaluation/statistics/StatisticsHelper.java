@@ -77,7 +77,7 @@ public class StatisticsHelper
 	 */
 	public static String getStatisticsFilename( final EvaluationProperties properties )
 	{
-		String[] str = new String[] { properties.getEvaluator(), properties.getStatisticsOutputFilename(), String.valueOf( properties.getQueriesTotal() ), String.valueOf( properties.getThreadPoolSize() ), String.valueOf( System.currentTimeMillis() ) };
+		String[] str = new String[] { properties.getStatisticsOutputFilename(), String.valueOf( properties.getQueriesTotal() ), String.valueOf( properties.getThreadPoolSize() ), String.valueOf( System.currentTimeMillis() ) };
 		return StringUtils.join( str, "_" );
 	}
 
