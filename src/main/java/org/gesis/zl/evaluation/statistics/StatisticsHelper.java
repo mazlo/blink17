@@ -4,7 +4,6 @@ import static ch.lambdaj.Lambda.avg;
 import static ch.lambdaj.Lambda.max;
 import static ch.lambdaj.Lambda.min;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -37,56 +36,12 @@ public class StatisticsHelper
 	 */
 	public static void writeResults( final Multimap<String, Long> results, final EvaluationProperties properties )
 	{
-		writeResults( getStatisticsFilename( properties, false ), results, false );
-		writeResults( getStatisticsFilename( properties, true ), results, true );
-	}
+		String filename = getStatisticsFilename( properties );
 
-	/**
-	 * @param results
-	 */
-	public static void writeResults( final String toFile, final Multimap<String, Long> results, boolean details )
-	{
 		try
 		{
-			// print details
-			if ( details )
-			{
-				CSVWriter csvFile = new CSVWriter( new FileWriter( new File( toFile ) ), ';' );
-
-				// print headers
-				String[] headers = results.keySet().toArray( new String[] {} );
-				csvFile.writeNext( headers );
-				csvFile.flush();
-
-				for ( String query : headers )
-				{
-					Collection<Long> set = results.get( query );
-					csvFile.writeNext( set.toArray( new String[] {} ) );
-					csvFile.flush();
-				}
-
-				csvFile.close();
-
-				return;
-			}
-
-			// summed up values
-			BufferedWriter statsFile = new BufferedWriter( new FileWriter( new File( toFile ) ) );
-
-			statsFile.write( "query_name;avg_time;max_time;min_time;total_no" );
-			statsFile.newLine();
-
-			for ( String key : results.keySet() )
-			{
-				Collection<Long> set = results.get( key );
-				Number avg = avg( set );
-				Number max = max( set );
-				Number min = min( set );
-				statsFile.write( key + ";" + avg + ";" + max + ";" + min + ";" + set.size() );
-				statsFile.newLine();
-			}
-
-			statsFile.close();
+			log.info( "Writing results" );
+			printDetails( filename, results );
 		}
 		catch ( IOException e )
 		{
@@ -94,16 +49,84 @@ public class StatisticsHelper
 			e.printStackTrace();
 		}
 
-		log.info( "Writing results" );
+		try
+		{
+			log.info( "Writing statistics" );
+			printStatistics( "statistics_" + filename, results );
+		}
+		catch ( IOException e )
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	/**
+	 * 
+	 * @param toFile
+	 * @param results
+	 * @throws IOException
+	 */
+	private static void printStatistics( String toFile, final Multimap<String, Long> results ) throws IOException
+	{
+		// print summed up values
+		CSVWriter csvFile = new CSVWriter( new FileWriter( new File( toFile ) ), ';' );
+
+		// print headers
+		String[] headers = new String[] { "query_name", "avg_time", "max_time", "min_time", "total_no" };
+		csvFile.writeNext( headers );
+		csvFile.flush();
+
+		for ( String query : headers )
+		{
+			Collection<Long> set = results.get( query );
+
+			Number avg = avg( set );
+			Number max = max( set );
+			Number min = min( set );
+
+			csvFile.writeNext( new String[] { query, avg.toString(), max.toString(), min.toString(), String.valueOf( set.size() ) } );
+			csvFile.flush();
+		}
+
+		csvFile.close();
+	}
+
+	/**
+	 * 
+	 * @param results
+	 * @throws IOException
+	 */
+	public static void printDetails( String toFile, final Multimap<String, Long> results ) throws IOException
+	{
+		// print details
+		CSVWriter csvFile = new CSVWriter( new FileWriter( new File( toFile ) ), ';' );
+
+		// print headers
+		String[] headers = results.keySet().toArray( new String[] {} );
+		csvFile.writeNext( headers );
+		csvFile.flush();
+
+		for ( String query : headers )
+		{
+			Collection<Long> set = results.get( query );
+			csvFile.writeNext( set.toArray( new String[] {} ) );
+			csvFile.flush();
+		}
+
+		csvFile.close();
+
+		return;
 	}
 
 	/**
 	 * @param details
 	 * @return
 	 */
-	public static String getStatisticsFilename( final EvaluationProperties properties, boolean details )
+	public static String getStatisticsFilename( final EvaluationProperties properties )
 	{
-		String[] str = new String[] { properties.getStatisticsOutputFilename(), details ? "details" : "", String.valueOf( properties.getQueriesTotal() ), String.valueOf( properties.getThreadPoolSize() ), String.valueOf( System.currentTimeMillis() ) };
+		String[] str = new String[] { properties.getStatisticsOutputFilename(), String.valueOf( properties.getQueriesTotal() ), String.valueOf( properties.getThreadPoolSize() ), String.valueOf( System.currentTimeMillis() ), ".csv" };
 		return StringUtils.join( str, "_" );
 	}
 
