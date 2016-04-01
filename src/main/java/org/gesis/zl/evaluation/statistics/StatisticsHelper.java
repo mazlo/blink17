@@ -103,21 +103,39 @@ public class StatisticsHelper
 		// print details
 		CSVWriter csvFile = new CSVWriter( new FileWriter( new File( toFile ) ), ';' );
 
-		// print headers
-		String[] headers = results.keySet().toArray( new String[] {} );
-		csvFile.writeNext( headers );
-		csvFile.flush();
-
-		for ( String query : headers )
+		for ( String query : results.keySet() )
 		{
 			Collection<Long> set = results.get( query );
-			csvFile.writeNext( set.toArray( new String[] {} ) );
+
+			String[] valuesToPrint = getRowOfValues( query, set );
+
+			csvFile.writeNext( valuesToPrint );
 			csvFile.flush();
 		}
 
 		csvFile.close();
 
 		return;
+	}
+
+	/**
+	 * 
+	 * @param set
+	 * @return
+	 */
+	private static String[] getRowOfValues( String firstValue, Collection<Long> set )
+	{
+		Long[] values = set.toArray( new Long[] {} );
+		String[] valuesToPrint = new String[values.length + 1];
+
+		valuesToPrint[0] = firstValue;
+
+		for ( int i = 1; i < values.length; i++ )
+		{
+			valuesToPrint[i] = String.valueOf( values[i - 1] );
+		}
+
+		return valuesToPrint;
 	}
 
 	/**
