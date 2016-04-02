@@ -9,16 +9,23 @@
 
 import os
 import time
+import sys
 
-for tps in ["1"]:
+from evaluate_each_distribution import run_evaluation
+
+distribution = sys.argv[1] if ( len(sys.argv) > 1 and sys.argv[1] != '' ) else "equal"
+
+def withMysql():
+  print "[INFO] shutting down mysql"
   os.system( "service mysqld stop" );
-  print "dropping caches..";
+  time.sleep(10);
+  print "[INFO] dropping caches";
   os.system( "sync && echo 3 > /proc/sys/vm/drop_caches" );
+  print "[INFO] starting mysql"
   os.system( "service mysqld start" );
-  time.sleep(5);
-  print "setting up thread pool to "+ tps;
-  os.system( "sudo -u matthaeus -H sed -i 's/thread.pool.size=.*/thread.pool.size="+ tps +"/' application.properties ");
-  print "about to start evaluation..";
-  time.sleep(5);
+  print "[INFO] about to start evaluation...";
+  time.sleep(10);
   os.system( "java -jar disco-evaluation-0.0.1-SNAPSHOT.jar" );
+  return
 
+run_evaluation( distribution, 'mysql', withMysql )
