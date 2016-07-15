@@ -30,8 +30,7 @@ Per default, the queries are placed in a folder like `queries-X`, where `X` is t
 
 ## Distributions
 
-Each query will _not_ be executed subsequently a specific number of times. Rather all queries are spread across a bucket of a
-specific size. They are spread according to a distribution you specify.
+There are two scenarios: either there is a file in folder `queries/equalDistribution.txt` or `queries/probabilityDistribution.txt` or not. In case there is a file this file is used as the execution sequence of queries. If there is no file the sequence is computed according to the configuration given in the property file.
 
 - Property value for `queries.distribution` says something about the distribution of the queries in the bucket. Possible values are `equalDistribution` and `probabilityDistribution`. This value will instantiate the corresponding evaluator AND will give the program a hint where to place or find the distributions of your queries.
 
