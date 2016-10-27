@@ -19,12 +19,9 @@ import com.google.common.collect.Multimap;
  * @author matthaeus
  * 
  */
-public class VirtuosoEvaluator implements Evaluator
+public class VirtuosoEvaluator extends Evaluator
 {
 	private static Logger log = LoggerFactory.getLogger( VirtuosoEvaluator.class );
-
-	private EvaluationProperties properties;
-	private String[][] queriesToExecute;
 
 	/*
 	 * (non-Javadoc)
@@ -34,22 +31,25 @@ public class VirtuosoEvaluator implements Evaluator
 	@Override
 	public Multimap<String, Long> execute() throws InterruptedException
 	{
+		EvaluationProperties props = getEvaluationProperties();
+		String[][] queriesToExecute = getQueries();
+
 		// prepare threads
-		ExecutorService executor = Executors.newFixedThreadPool( this.properties.getThreadPoolSize() );
+		ExecutorService executor = Executors.newFixedThreadPool( props.getThreadPoolSize() );
 
 		List<Future<Long>> listOfWorkers = new ArrayList<Future<Long>>();
 
-		int totalExecutions = this.queriesToExecute.length;
+		int totalExecutions = queriesToExecute.length;
 
 		// start so many threads a there are queries
 		for ( int i = 0; i < totalExecutions; i++ )
 		{
-			if ( this.queriesToExecute[i][1].length() == 0 )
+			if ( queriesToExecute[i][1].length() == 0 )
 			{
 				continue;
 			}
 
-			Callable<Long> queryExecution = new VirtuosoQueryExecutor( this.properties.getDbUrl() + this.properties.getDbName(), this.queriesToExecute[i] );
+			Callable<Long> queryExecution = new VirtuosoQueryExecutor( props.getDbUrl() + props.getDbName(), queriesToExecute[i] );
 
 			// execute
 			Future<Long> submitedWorker = executor.submit( queryExecution );
@@ -66,18 +66,7 @@ public class VirtuosoEvaluator implements Evaluator
 			// wait to terminate
 		}
 
-		return StatisticsHelper.collectResults( listOfWorkers, this.queriesToExecute );
+		return StatisticsHelper.collectResults( listOfWorkers, queriesToExecute );
 	}
 
-	@Override
-	public void setEvaluationProperties( final EvaluationProperties properties )
-	{
-		this.properties = properties;
-	}
-
-	@Override
-	public void setQueries( final String[][] queriesToExecute )
-	{
-		this.queriesToExecute = queriesToExecute;
-	}
 }

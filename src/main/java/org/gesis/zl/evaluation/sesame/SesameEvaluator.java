@@ -23,12 +23,9 @@ import com.google.common.collect.Multimap;
  * @author matthaeus
  * 
  */
-public class SesameEvaluator implements Evaluator
+public class SesameEvaluator extends Evaluator
 {
 	private static Logger log = LoggerFactory.getLogger( SesameEvaluator.class );
-
-	private EvaluationProperties properties;
-	private String[][] queriesToExecute;
 
 	/*
 	 * (non-Javadoc)
@@ -40,8 +37,11 @@ public class SesameEvaluator implements Evaluator
 	{
 		log.info( "Executing ... " );
 
+		EvaluationProperties props = getEvaluationProperties();
+		String[][] queriesToExecute = getQueries();
+
 		// initialize repository
-		Repository repo = new HTTPRepository( this.properties.getDbUrl(), this.properties.getDbName() );
+		Repository repo = new HTTPRepository( props.getDbUrl(), props.getDbName() );
 		try
 		{
 			repo.initialize();
@@ -55,21 +55,21 @@ public class SesameEvaluator implements Evaluator
 		}
 
 		// prepare threads
-		ExecutorService executor = Executors.newFixedThreadPool( this.properties.getThreadPoolSize() );
+		ExecutorService executor = Executors.newFixedThreadPool( props.getThreadPoolSize() );
 
 		List<Future<Long>> listOfWorkers = new ArrayList<Future<Long>>();
 
-		int totalExecutions = this.queriesToExecute.length;
+		int totalExecutions = queriesToExecute.length;
 
 		// start so many threads a there are queries
 		for ( int i = 0; i < totalExecutions; i++ )
 		{
-			if ( this.queriesToExecute[i][1].length() == 0 )
+			if ( queriesToExecute[i][1].length() == 0 )
 			{
 				continue;
 			}
 
-			Callable<Long> queryExecution = new SesameQueryExecutor( repo, this.queriesToExecute[i] );
+			Callable<Long> queryExecution = new SesameQueryExecutor( repo, queriesToExecute[i] );
 
 			// execute
 			Future<Long> submitedWorker = executor.submit( queryExecution );
@@ -86,18 +86,7 @@ public class SesameEvaluator implements Evaluator
 			// wait to terminate
 		}
 
-		return StatisticsHelper.collectResults( listOfWorkers, this.queriesToExecute );
+		return StatisticsHelper.collectResults( listOfWorkers, queriesToExecute );
 	}
 
-	@Override
-	public void setEvaluationProperties( final EvaluationProperties properties )
-	{
-		this.properties = properties;
-	}
-
-	@Override
-	public void setQueries( final String[][] queriesToExecute )
-	{
-		this.queriesToExecute = queriesToExecute;
-	}
 }
