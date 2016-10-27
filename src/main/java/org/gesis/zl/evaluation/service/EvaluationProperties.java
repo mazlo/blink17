@@ -10,8 +10,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class EvaluationProperties
 {
-	@Value( "${evaluate}" )
+	@Value( "${evaluation.type}" )
 	private String evaluator;
+
+	@Value( "${evaluation.style}" )
+	private String evaluationStyle;
 
 	@Value( "${server.db.driverClass}" )
 	private String dbDriverClass;
@@ -27,6 +30,9 @@ public class EvaluationProperties
 
 	@Value( "${server.db.password}" )
 	private String dbPassword;
+
+	@Value( "${server.db.initd}" )
+	private String dbInitdScript;
 
 	@Value( "${statistics.output.filename}" )
 	private String statisticsOutputFilename;
@@ -62,6 +68,11 @@ public class EvaluationProperties
 		return this.evaluator;
 	}
 
+	public String getEvaluationStyle()
+	{
+		return this.evaluationStyle;
+	}
+
 	public String getQueriesFolder()
 	{
 		return this.queriesFolder;
@@ -90,6 +101,11 @@ public class EvaluationProperties
 	public String getDbPassword()
 	{
 		return this.dbPassword;
+	}
+
+	public String getDbInitdScript()
+	{
+		return this.dbInitdScript;
 	}
 
 	public String getStatisticsOutputFilename()
