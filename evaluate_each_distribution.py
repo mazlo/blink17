@@ -1,7 +1,7 @@
 import os
 
 #
-def run_evaluation( distribution, ptype, callback, ucs=["uc1","uc2","uc3","uc4"], weights=["50_50","60_40","70_30","80_20","90_10"] ):
+def run_evaluation( distribution, ptype, callback, ucs=["uc1","uc2","uc3","uc4"], weights=["50_50","60_40","70_30","80_20","90_10","100_0"] ):
   # extend the list if you want to have more than one thread
   for tps in ["1"]:
 

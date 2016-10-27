@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Multimap;
+import com.google.common.util.concurrent.Futures;
 
 /**
  * @author matthaeus
@@ -54,6 +55,7 @@ public class MysqlEvaluator extends Evaluator
 		{
 			if ( queriesToExecute[i][1].length() == 0 )
 			{
+				listOfWorkers.add( Futures.immediateFuture( 0l ) );
 				continue;
 			}
 
