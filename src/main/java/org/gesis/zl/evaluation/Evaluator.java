@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.gesis.zl.evaluation.service.EvaluationProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Multimap;
 
@@ -16,6 +18,7 @@ import com.google.common.collect.Multimap;
  */
 public abstract class Evaluator
 {
+	private static Logger log = LoggerFactory.getLogger( Evaluator.class );
 
 	private EvaluationProperties evaluationProperties;
 	private String[][] queriesToExecute;
@@ -29,33 +32,41 @@ public abstract class Evaluator
 	/**
 	 * 
 	 */
-	public void prepareEvaluation()
+	public int prepareEvaluation()
 	{
 		// restart db in case we evaluate using "cold" database
 
 		if ( !StringUtils.equals( "cold", this.evaluationProperties.getEvaluationStyle() ) )
 		{
-			return;
+			log.info( "Queries will be executed all against a running database." );
+			return 0;
 		}
 
+		log.info( "Preparing to restart the database." );
+
 		String script = this.evaluationProperties.getDbInitdScript();
+		int returnValue = 0;
 
 		try
 		{
 			// run init script and wait until it is finished
-			Process p = Runtime.getRuntime().exec( script );
+			ProcessBuilder pb = new ProcessBuilder( script.split( " " ) );
+			Process p = pb.start();
+
 			p.waitFor();
+
+			log.info( "Restart performed." );
 		}
 		catch ( IOException e )
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		catch ( InterruptedException e )
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		return returnValue;
 	}
 
 	public EvaluationProperties getEvaluationProperties()
