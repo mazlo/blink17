@@ -205,20 +205,25 @@ public class EvaluationExecuter
 	 * 
 	 * @see org.gesis.zl.evaluation.mysql.Evaluator#debugProperties()
 	 */
-	public void debugProperties( final EvaluationProperties properties )
+	public void debugProperties()
 	{
-		if ( properties != null )
+		if ( this.properties == null )
 		{
-			log.debug( "Properties set:" );
-			log.debug( "Database url: '{}'", properties.getDbUrl() );
-			log.debug( "Database name: '{}'", properties.getDbName() );
-			log.debug( "Queries folder: '{}'", properties.getQueriesFolder() );
-			log.debug( "Queries filetype: '{}'", properties.getQueriesFiletype() );
-			log.debug( "Queries distribution: '{}'", properties.getQueriesDistribution() );
-			log.debug( "Queries total: '{}'", properties.getQueriesTotal() );
-			log.debug( "Queries available: '{}'", properties.getQueriesAvailable() );
-			log.debug( "Queries probabilities: '{}'", properties.getQueriesProbabilities() );
-			log.debug( "Thread pool size: '{}'", properties.getThreadPoolSize() );
+			return;
 		}
+
+		log.info( "==== Properties BEGIN ====" );
+		log.info( "Evaluation of: {}", this.properties.getEvaluator() );
+		log.info( "Evaluation style: {}", this.properties.getEvaluationStyle() );
+		log.info( "Database url: '{}'", this.properties.getDbUrl() );
+		log.info( "Database name: '{}'", this.properties.getDbName() );
+		log.info( "Queries folder: '{}'", this.properties.getQueriesFolder() );
+		log.info( "Queries filetype: '{}'", this.properties.getQueriesFiletype() );
+		log.info( "Queries distribution: '{}'", this.properties.getQueriesDistribution() );
+		log.info( "Queries total: '{}'", this.properties.getQueriesTotal() );
+		log.info( "Queries available: '{}'", this.properties.getQueriesAvailable() );
+		log.info( "Queries probabilities: '{}'", this.properties.getQueriesProbabilities() );
+		log.info( "Thread pool size: '{}'", this.properties.getThreadPoolSize() );
+		log.info( "==== Properties END ====" );
 	}
 }

@@ -59,8 +59,6 @@ public class MysqlEvaluator extends Evaluator
 				continue;
 			}
 
-
-
 			Callable<Long> queryExecution = new MysqlQueryExecutor( datasource, queriesToExecute[i] );
 
 			// execute
