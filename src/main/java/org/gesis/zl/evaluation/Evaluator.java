@@ -1,6 +1,9 @@
 package org.gesis.zl.evaluation;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import org.apache.commons.lang3.StringUtils;
 import org.gesis.zl.evaluation.service.EvaluationProperties;
@@ -53,9 +56,11 @@ public abstract class Evaluator
 			ProcessBuilder pb = new ProcessBuilder( script.split( " " ) );
 			Process p = pb.start();
 
-			p.waitFor();
+			waitFor( p );
 
-			log.info( "Restart performed." );
+			log.info( "Restart performed. Waiting 10sec for database to recover from restart.." );
+
+			Thread.sleep( 10000l );
 		}
 		catch ( IOException e )
 		{
@@ -63,10 +68,39 @@ public abstract class Evaluator
 		}
 		catch ( InterruptedException e )
 		{
-			e.printStackTrace();
+			log.error( e.getMessage() );
 		}
 
 		return returnValue;
+	}
+
+	/**
+	 * 
+	 * @param p
+	 */
+	private void waitFor( final Process p )
+	{
+		InputStream inputStream = p.getInputStream();
+
+		BufferedReader reader = new BufferedReader( new InputStreamReader( inputStream ) );
+
+		try
+		{
+			while ( reader.readLine() != null )
+			{
+				//
+				Thread.sleep( 1000l );
+			}
+		}
+		catch ( IOException e )
+		{
+			log.error( e.getMessage() );
+		}
+		catch ( InterruptedException e )
+		{
+			log.error( e.getMessage() );
+		}
+
 	}
 
 	public EvaluationProperties getEvaluationProperties()
