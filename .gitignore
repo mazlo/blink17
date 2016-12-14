@@ -1,3 +1,4 @@
 .settings/
 target/
 *.jar
+.DS_Store*
