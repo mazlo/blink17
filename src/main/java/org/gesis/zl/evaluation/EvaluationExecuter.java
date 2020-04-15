@@ -10,6 +10,7 @@ import org.gesis.zl.evaluation.service.query.QueryShuffleService;
 import org.gesis.zl.evaluation.statistics.StatisticsHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.google.common.collect.Multimap;
@@ -29,7 +30,7 @@ public class EvaluationExecuter
 	private EvaluationProperties properties;
 	private QueryShuffleService queryShuffleService;
 
-	private final ClassPathXmlApplicationContext context;
+	private final ApplicationContext context;
 
 	private Multimap<String, Long> results;
 
@@ -61,7 +62,7 @@ public class EvaluationExecuter
 	 * 
 	 * @param context
 	 */
-	public EvaluationExecuter( final ClassPathXmlApplicationContext context )
+	public EvaluationExecuter( final ApplicationContext context )
 	{
 		this.context = context;
 
@@ -92,9 +93,10 @@ public class EvaluationExecuter
 	 * @param args
 	 * @return
 	 */
-	private void loadEvaluator()
+	public Evaluator loadEvaluator()
 	{
 		String evaluator = this.properties.getEvaluator();
+		String coldStarter = this.properties.getEvaluationStyle();
 
 		if ( !Sets.newHashSet( new String[] { "mysql", "sesame", "neo4j", "stardog", "virtuoso" } ).contains( evaluator ) )
 		{
@@ -104,13 +106,25 @@ public class EvaluationExecuter
 
 		try
 		{
+			String className = "org.gesis.zl.evaluation." + evaluator + "." + WordUtils.capitalize( evaluator ) + "Evaluator";
+
+			// cold starters class names are expected to end with "..Cold.java"
+			if ( StringUtils.equals( "cold", coldStarter ) )
+			{
+				className += "Cold";
+			}
+
 			@SuppressWarnings( "unchecked" )
-			Class<Evaluator> evaluatorClass = (Class<Evaluator>) Class.forName( "org.gesis.zl.evaluation." + evaluator + "." + WordUtils.capitalize( evaluator ) + "Evaluator" );
+			Class<Evaluator> evaluatorClass = (Class<Evaluator>) Class.forName( className );
 
 			this.evaluator = evaluatorClass.newInstance();
 			this.evaluator.setEvaluationProperties( this.properties );
 
 			log.info( "{} instantiated successfully", this.evaluator.getClass().getName() );
+
+			debugProperties();
+
+			return this.evaluator;
 		}
 		catch ( ClassNotFoundException e )
 		{
@@ -124,12 +138,14 @@ public class EvaluationExecuter
 		{
 			e.printStackTrace();
 		}
+
+		return null;
 	}
 
 	/**
 	 * 
 	 */
-	private void loadBeans()
+	public void loadBeans()
 	{
 		// set properties
 		this.properties = this.context.getBean( EvaluationProperties.class );
@@ -153,7 +169,7 @@ public class EvaluationExecuter
 	/**
 	 * 
 	 */
-	private void loadQueries()
+	public void loadQueries()
 	{
 		String expectedDistributionFilepath = "queries/" + this.properties.getQueriesDistribution() + ".txt";
 
@@ -189,20 +205,25 @@ public class EvaluationExecuter
 	 * 
 	 * @see org.gesis.zl.evaluation.mysql.Evaluator#debugProperties()
 	 */
-	public void debugProperties( final EvaluationProperties properties )
+	public void debugProperties()
 	{
-		if ( properties != null )
+		if ( this.properties == null )
 		{
-			log.debug( "Properties set:" );
-			log.debug( "Database url: '{}'", properties.getDbUrl() );
-			log.debug( "Database name: '{}'", properties.getDbName() );
-			log.debug( "Queries folder: '{}'", properties.getQueriesFolder() );
-			log.debug( "Queries filetype: '{}'", properties.getQueriesFiletype() );
-			log.debug( "Queries distribution: '{}'", properties.getQueriesDistribution() );
-			log.debug( "Queries total: '{}'", properties.getQueriesTotal() );
-			log.debug( "Queries available: '{}'", properties.getQueriesAvailable() );
-			log.debug( "Queries probabilities: '{}'", properties.getQueriesProbabilities() );
-			log.debug( "Thread pool size: '{}'", properties.getThreadPoolSize() );
+			return;
 		}
+
+		log.info( "==== Properties BEGIN ====" );
+		log.info( "Evaluation of: {}", this.properties.getEvaluator() );
+		log.info( "Evaluation style: {}", this.properties.getEvaluationStyle() );
+		log.info( "Database url: '{}'", this.properties.getDbUrl() );
+		log.info( "Database name: '{}'", this.properties.getDbName() );
+		log.info( "Queries folder: '{}'", this.properties.getQueriesFolder() );
+		log.info( "Queries filetype: '{}'", this.properties.getQueriesFiletype() );
+		log.info( "Queries distribution: '{}'", this.properties.getQueriesDistribution() );
+		log.info( "Queries total: '{}'", this.properties.getQueriesTotal() );
+		log.info( "Queries available: '{}'", this.properties.getQueriesAvailable() );
+		log.info( "Queries probabilities: '{}'", this.properties.getQueriesProbabilities() );
+		log.info( "Thread pool size: '{}'", this.properties.getThreadPoolSize() );
+		log.info( "==== Properties END ====" );
 	}
 }

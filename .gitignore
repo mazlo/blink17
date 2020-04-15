@@ -1,4 +1,6 @@
 .settings/
 target/
+statistics/
+results/
 *.jar
 .DS_Store*

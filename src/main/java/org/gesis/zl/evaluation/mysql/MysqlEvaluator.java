@@ -15,18 +15,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Multimap;
+import com.google.common.util.concurrent.Futures;
 
 /**
  * @author matthaeus
  * 
  */
-public class MysqlEvaluator implements Evaluator
+public class MysqlEvaluator extends Evaluator
 {
 
 	private static Logger log = LoggerFactory.getLogger( MysqlEvaluator.class );
-
-	private EvaluationProperties properties;
-	private String[][] queriesToExecute;
 
 	/* (non-Javadoc)
 	 * @see org.gesis.zl.evaluation.mysql.Evaluator#execute()
@@ -36,28 +34,32 @@ public class MysqlEvaluator implements Evaluator
 	{
 		log.info( "Executing ..." );
 
+		EvaluationProperties props = getEvaluationProperties();
+		String[][] queriesToExecute = getQueries();
+
 		BasicDataSource datasource = new BasicDataSource();
-		datasource.setDriverClassName( this.properties.getDbDriverClass() );
-		datasource.setUrl( this.properties.getDbUrl() + this.properties.getDbName() );
-		datasource.setUsername( this.properties.getDbUsername() );
-		datasource.setPassword( this.properties.getDbPassword() );
+		datasource.setDriverClassName( props.getDbDriverClass() );
+		datasource.setUrl( props.getDbUrl() + props.getDbName() );
+		datasource.setUsername( props.getDbUsername() );
+		datasource.setPassword( props.getDbPassword() );
 
 		// prepare threads
-		ExecutorService executor = Executors.newFixedThreadPool( this.properties.getThreadPoolSize() );
+		ExecutorService executor = Executors.newFixedThreadPool( props.getThreadPoolSize() );
 
 		List<Future<Long>> listOfWorkers = new ArrayList<Future<Long>>();
 
-		int totalExecutions = this.queriesToExecute.length;
+		int totalExecutions = queriesToExecute.length;
 
 		// start so many threads a there are queries
 		for ( int i = 0; i < totalExecutions; i++ )
 		{
-			if ( this.queriesToExecute[i][1].length() == 0 )
+			if ( queriesToExecute[i][1].length() == 0 )
 			{
+				listOfWorkers.add( Futures.immediateFuture( 0l ) );
 				continue;
 			}
 
-			Callable<Long> queryExecution = new MysqlQueryExecutor( datasource, this.queriesToExecute[i] );
+			Callable<Long> queryExecution = new MysqlQueryExecutor( datasource, queriesToExecute[i] );
 
 			// execute
 			Future<Long> submitedWorker = executor.submit( queryExecution );
@@ -74,19 +76,7 @@ public class MysqlEvaluator implements Evaluator
 			// wait to terminate
 		}
 
-		return StatisticsHelper.collectResults( listOfWorkers, this.queriesToExecute );
-	}
-
-	@Override
-	public void setEvaluationProperties( final EvaluationProperties properties )
-	{
-		this.properties = properties;
-	}
-
-	@Override
-	public void setQueries( final String[][] queriesToExecute )
-	{
-		this.queriesToExecute = queriesToExecute;
+		return StatisticsHelper.collectResults( listOfWorkers, queriesToExecute );
 	}
 
 }

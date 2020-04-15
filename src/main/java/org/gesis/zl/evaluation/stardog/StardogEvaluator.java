@@ -14,17 +14,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Multimap;
+import com.google.common.util.concurrent.Futures;
 
 /**
  * @author matthaeus
  * 
  */
-public class StardogEvaluator implements Evaluator
+public class StardogEvaluator extends Evaluator
 {
 	private static Logger log = LoggerFactory.getLogger( StardogEvaluator.class );
-
-	private EvaluationProperties properties;
-	private String[][] queriesToExecute;
 
 	/*
 	 * (non-Javadoc)
@@ -34,22 +32,26 @@ public class StardogEvaluator implements Evaluator
 	@Override
 	public Multimap<String, Long> execute() throws InterruptedException
 	{
+		EvaluationProperties props = getEvaluationProperties();
+		String[][] queriesToExecute = getQueries();
+
 		// prepare threads
-		ExecutorService executor = Executors.newFixedThreadPool( this.properties.getThreadPoolSize() );
+		ExecutorService executor = Executors.newFixedThreadPool( props.getThreadPoolSize() );
 
 		List<Future<Long>> listOfWorkers = new ArrayList<Future<Long>>();
 
-		int totalExecutions = this.queriesToExecute.length;
+		int totalExecutions = queriesToExecute.length;
 
 		// start so many threads a there are queries
 		for ( int i = 0; i < totalExecutions; i++ )
 		{
-			if ( this.queriesToExecute[i][1].length() == 0 )
+			if ( queriesToExecute[i][1].length() == 0 )
 			{
+				listOfWorkers.add( Futures.immediateFuture( 0l ) );
 				continue;
 			}
 
-			Callable<Long> queryExecution = new StardogQueryExecutor( this.properties.getDbUrl() + this.properties.getDbName(), this.queriesToExecute[i] );
+			Callable<Long> queryExecution = new StardogQueryExecutor( props.getDbUrl() + props.getDbName(), queriesToExecute[i] );
 
 			// execute
 			Future<Long> submitedWorker = executor.submit( queryExecution );
@@ -66,18 +68,7 @@ public class StardogEvaluator implements Evaluator
 			// wait to terminate
 		}
 
-		return StatisticsHelper.collectResults( listOfWorkers, this.queriesToExecute );
+		return StatisticsHelper.collectResults( listOfWorkers, queriesToExecute );
 	}
 
-	@Override
-	public void setEvaluationProperties( final EvaluationProperties properties )
-	{
-		this.properties = properties;
-	}
-
-	@Override
-	public void setQueries( final String[][] queriesToExecute )
-	{
-		this.queriesToExecute = queriesToExecute;
-	}
 }
