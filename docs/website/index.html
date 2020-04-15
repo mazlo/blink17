@@ -1,0 +1,146 @@
+
+<!-- saved from url=(0033)http://mazlo.de/papers/blink2017/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+  <link rel="stylesheet" type="text/css" href="./w3.css">
+</head>
+
+<body>
+  <div class="w3-container w3-col l6 m6">
+    <h1 style="text-align: center"><span style="border-bottom: 1px solid #ccc">Towards a Use Case Driven Evaluation of Database Systems for RDF Data Storage - A Case Study for Statistical Data</span></h1>
+
+    <div style="text-align: center">
+	<p>Matthäus Zloch, GESIS - Leibniz-Institute for the Social Sciences</p>
+	<p>Daniel Hienert, GESIS - Leibniz-Institute for the Social Sciences</p>
+	<p>Stefan Conrad, Heinrich-Heine-Universität Düsseldorf</p>
+    </div>
+
+    <h3>Abstract</h3>
+
+    <div>
+      <p style="text-align: justify">
+	In order to store Linked Data one may choose from a growing number of available database systems: from traditional relational databases to RDF triple stores, not to mention the area of NoSQL technologies. Comparisons of database systems often use benchmarks to evaluate systems with best overall runtime. However, the structure of data and queries used in traditional benchmarks differ from real-world environments. They are typically not aligned with use cases from real-world applications. In this paper we investigate a use case driven approach where queries are grouped by means of more general application use cases. We evaluate and compare eight heterogeneous database systems (four relational, two graph, two column-oriented) with real-world application data and measure query runtime performance according to these use cases. The evaluation results show that the choice for a database system should not only be based on the overall query runtimes, as a naive evaluation would suggest, but preferably according to the use cases of the application itself. 
+     </p>
+
+    </div>
+
+    <!-- Paper -->
+    <div>
+      <h4>Workshop on Benchmarking Linked Data (BLINK) at ISWC 2017, Vienna.</h4>
+      <table>
+        <tbody><tr><td>Paper</td><td>Presentation</td></tr>
+        <tr>
+          <td><a href="http://ceur-ws.org/Vol-1932/paper-08.pdf">Download</a></td>
+          <td><a href="http://mazlo.de/papers/blink2017/BLINK-2017_presentation.pdf">Download</a></td>
+        </tr>
+      </tbody></table>
+    </div>
+    
+    <!-- Client Software -->
+    <div>
+      <h3>Client Software</h3>
+      <p>The client software evaluates one system against a list of queries. <a href="http://mazlo.de/papers/blink2017/data/disco-evaluation.tar.gz">download</a>. <br>In order to repeat the evaluation we did in the paper please use the exact same distribution of queries we used. You can find it in <a href="http://mazlo.de/papers/blink2017/#otherMaterial">other material</a>.</p>
+
+      <p>
+        Please remember to adjust <span class="w3-show-block w3-code">application.properties</span> before starting the evaluation. 
+        To start the evaluation for one system use the command <span class="w3-show-block w3-code">java -jar disco-evaluation.jar</span>
+      </p>
+
+      <p>Please see the <a href="http://mazlo.de/papers/blink2017/README.md">README.md</a> file for further instructions.</p>
+    </div>
+
+    <!-- Data -->
+    <div>
+      <h3>Data</h3>
+
+      <p>Please find an example snippet of Study data including descriptive statistics <a href="http://mazlo.de/papers/blink2017/#">at the bottom of this page</a>.</p>
+
+      <p>The complete dataset can be downloaded is here.</p>
+
+      <table>
+        <tbody><tr>
+	  <td>MySQL/ Postgresql/ Monetdb</td>
+          <td>Neo4j</td>
+          <td>Virtuoso 6/7</td>
+          <td>Stardog</td>
+        </tr>
+
+        <tr>
+          <td><a href="http://mazlo.de/papers/blink2017/data/mysql-dump-sql.tar.gz">download</a></td>
+          <td><a href="http://mazlo.de/papers/blink2017/data/neo4j-csv.tar.gz">download</a></td>
+          <td><a href="http://mazlo.de/papers/blink2017/data/virtuoso-stardog-nt.tar.gz">download</a></td>
+          <td><a href="http://mazlo.de/papers/blink2017/data/virtuoso-stardog-nt.tar.gz">download</a></td>
+        </tr>
+      </tbody></table>
+
+      <!-- Queries -->
+      <h3>Queries</h3>
+      <table>
+        <tbody><tr>
+          <td>&nbsp;</td>
+          <td>MySQL</td>
+          <td>Neo4j</td>
+          <td>Virtuoso/Stardog</td>
+        </tr>
+
+        <tr>
+          <td>&nbsp;</td>
+          <td><a href="http://mazlo.de/papers/blink2017/queries-mysql.tar.gz">download</a></td>
+          <td><a href="http://mazlo.de/papers/blink2017/queries-neo4j.tar.gz">download</a></td>
+          <td><a href="http://mazlo.de/papers/blink2017/queries-sparql.tar.gz">download</a></td>
+        </tr>
+
+        <tr><td>dp1</td><td><a href="http://mazlo.de/papers/blink2017/queries-mysql/dp1.sql">.sql</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-neo4j/dp1.cy">.cypher</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-sparql/dp1.sparql">.sparql</a></td></tr>
+        <tr><td>dp2</td><td><a href="http://mazlo.de/papers/blink2017/queries-mysql/dp2.sql">.sql</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-neo4j/dp2.cy">.cypher</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-sparql/dp2.sparql">.sparql</a></td></tr>
+        <tr><td>dp3</td><td><a href="http://mazlo.de/papers/blink2017/queries-mysql/dp3.sql">.sql</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-neo4j/dp3.cy">.cypher</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-sparql/dp3.sparql">.sparql</a></td></tr>
+        <tr><td>dp4</td><td><a href="http://mazlo.de/papers/blink2017/queries-mysql/dp4.sql">.sql</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-neo4j/dp4.cy">.cypher</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-sparql/dp4.sparql">.sparql</a></td></tr>
+        <tr><td>dsv1</td><td><a href="http://mazlo.de/papers/blink2017/queries-mysql/dsv1.sql">.sql</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-neo4j/dsv1.cy">.cypher</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-sparql/dsv1.sparql">.sparql</a></td></tr>
+        <tr><td>dsv2</td><td><a href="http://mazlo.de/papers/blink2017/queries-mysql/dsv2.sql">.sql</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-neo4j/dsv2.cy">.cypher</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-sparql/dsv2.sparql">.sparql</a></td></tr>
+        <tr><td>dsv3</td><td><a href="http://mazlo.de/papers/blink2017/queries-mysql/dsv3.sql">.sql</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-neo4j/dsv3.cy">.cypher</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-sparql/dsv3.sparql">.sparql</a></td></tr>
+        <tr><td>dsv4</td><td><a href="http://mazlo.de/papers/blink2017/queries-mysql/dsv4.sql">.sql</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-neo4j/dsv4.cy">.cypher</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-sparql/dsv4.sparql">.sparql</a></td></tr>
+        <tr><td>dsv5</td><td><a href="http://mazlo.de/papers/blink2017/queries-mysql/dsv5.sql">.sql</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-neo4j/dsv5.cy">.cypher</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-sparql/dsv5.sparql">.sparql</a></td></tr>
+        <tr><td>dsv5b</td><td><a href="http://mazlo.de/papers/blink2017/queries-mysql/dsv5b.sql">.sql</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-neo4j/dsv5b.cy">.cypher</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-sparql/dsv5b.sparql">.sparql</a></td></tr>
+        <tr><td>dsv6</td><td><a href="http://mazlo.de/papers/blink2017/queries-mysql/dsv6.sql">.sql</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-neo4j/dsv6.cy">.cypher</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-sparql/dsv6.sparql">.sparql</a></td></tr>
+        <tr><td>dv1</td><td><a href="http://mazlo.de/papers/blink2017/queries-mysql/dv1.sql">.sql</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-neo4j/dv1.cy">.cypher</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-sparql/dv1.sparql">.sparql</a></td></tr>
+        <tr><td>duc1</td><td><a href="http://mazlo.de/papers/blink2017/queries-mysql/duc1.sql">.sql</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-neo4j/duc1.cy">.cypher</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-sparql/duc1.sparql">.sparql</a></td></tr>
+        <tr><td>duc2</td><td><a href="http://mazlo.de/papers/blink2017/queries-mysql/duc2.sql">.sql</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-neo4j/duc2.cy">.cypher</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-sparql/duc2.sparql">.sparql</a></td></tr>
+        <tr><td>duc3</td><td><a href="http://mazlo.de/papers/blink2017/queries-mysql/duc3.sql">.sql</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-neo4j/duc3.cy">.cypher</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-sparql/duc3.sparql">.sparql</a></td></tr>
+        <tr><td>duc4</td><td><a href="http://mazlo.de/papers/blink2017/queries-mysql/duc4.sql">.sql</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-neo4j/duc4.cy">.cypher</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-sparql/duc4.sparql">.sparql</a></td></tr>
+        <tr><td>duc5</td><td><a href="http://mazlo.de/papers/blink2017/queries-mysql/duc5.sql">.sql</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-neo4j/duc5.cy">.cypher</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-sparql/duc5.sparql">.sparql</a></td></tr>
+        <tr><td>duc6</td><td><a href="http://mazlo.de/papers/blink2017/queries-mysql/duc6.sql">.sql</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-neo4j/duc6.cy">.cypher</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-sparql/duc6.sparql">.sparql</a></td></tr>
+        <tr><td>duc7</td><td><a href="http://mazlo.de/papers/blink2017/queries-mysql/duc7.sql">.sql</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-neo4j/duc7.cy">.cypher</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-sparql/duc7.sparql">.sparql</a></td></tr>
+        <tr><td>qd1</td><td><a href="http://mazlo.de/papers/blink2017/queries-mysql/qd1.sql">.sql</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-neo4j/qd1.cy">.cypher</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-sparql/qd1.sparql">.sparql</a></td></tr>
+        <tr><td>qd2</td><td><a href="http://mazlo.de/papers/blink2017/queries-mysql/qd2.sql">.sql</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-neo4j/qd2.cy">.cypher</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-sparql/qd2.sparql">.sparql</a></td></tr>
+        <tr><td>qd3</td><td><a href="http://mazlo.de/papers/blink2017/queries-mysql/qd3.sql">.sql</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-neo4j/qd3.cy">.cypher</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-sparql/qd3.sparql">.sparql</a></td></tr>
+        <tr><td>qd4</td><td><a href="http://mazlo.de/papers/blink2017/queries-mysql/qd4.sql">.sql</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-neo4j/qd4.cy">.cypher</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-sparql/qd4.sparql">.sparql</a></td></tr>
+        <tr><td>qd5</td><td><a href="http://mazlo.de/papers/blink2017/queries-mysql/qd5.sql">.sql</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-neo4j/qd5.cy">.cypher</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-sparql/qd5.sparql">.sparql</a></td></tr>
+        <tr><td>qd6</td><td><a href="http://mazlo.de/papers/blink2017/queries-mysql/qd6.sql">.sql</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-neo4j/qd6.cy">.cypher</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-sparql/qd6.sparql">.sparql</a></td></tr>
+        <tr><td>sd1</td><td><a href="http://mazlo.de/papers/blink2017/queries-mysql/sd1.sql">.sql</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-neo4j/sd1.cy">.cypher</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-sparql/sd1.sparql">.sparql</a></td></tr>
+        <tr><td>sd2</td><td><a href="http://mazlo.de/papers/blink2017/queries-mysql/sd2.sql">.sql</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-neo4j/sd2.cy">.cypher</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-sparql/sd2.sparql">.sparql</a></td></tr>
+        <tr><td>sd3</td><td><a href="http://mazlo.de/papers/blink2017/queries-mysql/sd3.sql">.sql</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-neo4j/sd3.cy">.cypher</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-sparql/sd3.sparql">.sparql</a></td></tr>
+        <tr><td>vd1</td><td><a href="http://mazlo.de/papers/blink2017/queries-mysql/vd1.sql">.sql</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-neo4j/vd1.cy">.cypher</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-sparql/vd1.sparql">.sparql</a></td></tr>
+        <tr><td>vd2</td><td><a href="http://mazlo.de/papers/blink2017/queries-mysql/vd2.sql">.sql</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-neo4j/vd2.cy">.cypher</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-sparql/vd2.sparql">.sparql</a></td></tr>
+        <tr><td>vd3</td><td><a href="http://mazlo.de/papers/blink2017/queries-mysql/vd3.sql">.sql</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-neo4j/vd3.cy">.cypher</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-sparql/vd3.sparql">.sparql</a></td></tr>
+        <tr><td>vd5</td><td><a href="http://mazlo.de/papers/blink2017/queries-mysql/vd5.sql">.sql</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-neo4j/vd5.cy">.cypher</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-sparql/vd5.sparql">.sparql</a></td></tr>
+        <tr><td>vd6</td><td><a href="http://mazlo.de/papers/blink2017/queries-mysql/vd6.sql">.sql</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-neo4j/vd6.cy">.cypher</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-sparql/vd6.sparql">.sparql</a></td></tr>
+        <tr><td>vd7</td><td><a href="http://mazlo.de/papers/blink2017/queries-mysql/vd7.sql">.sql</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-neo4j/vd7.cy">.cypher</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-sparql/vd7.sparql">.sparql</a></td></tr>
+        <tr><td>vf2</td><td><a href="http://mazlo.de/papers/blink2017/queries-mysql/vf2.sql">.sql</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-neo4j/vf2.cy">.cypher</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-sparql/vf2.sparql">.sparql</a></td></tr>
+        <tr><td>vf2b</td><td><a href="http://mazlo.de/papers/blink2017/queries-mysql/vf2b.sql">.sql</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-neo4j/vf2b.cy">.cypher</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-sparql/vf2b.sparql">.sparql</a></td></tr>
+        <tr><td>vf3</td><td><a href="http://mazlo.de/papers/blink2017/queries-mysql/vf3.sql">.sql</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-neo4j/vf3.cy">.cypher</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-sparql/vf3.sparql">.sparql</a></td></tr>
+        <tr><td>vf3b</td><td><a href="http://mazlo.de/papers/blink2017/queries-mysql/vf3b.sql">.sql</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-neo4j/vf3b.cy">.cypher</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-sparql/vf3b.sparql">.sparql</a></td></tr>
+        <tr><td>vf4</td><td><a href="http://mazlo.de/papers/blink2017/queries-mysql/vf4.sql">.sql</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-neo4j/vf4.cy">.cypher</a></td><td><a href="http://mazlo.de/papers/blink2017/queries-sparql/vf4.sparql">.sparql</a></td></tr>
+      </tbody></table>
+    
+    <!-- Other -->
+    <a name="otherMaterial"></a>
+    <div>
+      <h3>Other Material</h3>
+
+      <!-- <p>Results used for the plots: <a href='data/results.tar.gz'>download</a></p> -->
+      <p>Distributions of queries used in evaluation: <a href="http://mazlo.de/papers/blink2017/data/distributions.tar.gz">download</a></p>
+    </div>
+
+  </div>
+
+
+
+</div></body></html>
